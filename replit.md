@@ -22,11 +22,12 @@ CreatorStack is a full-stack web application that allows creators to showcase th
 - **Development**: Hot reload with Vite middleware integration
 
 ### Database Design
-- **Primary Database**: PostgreSQL 16
+- **Primary Database**: PostgreSQL 16 (Active)
 - **ORM**: Drizzle ORM for type-safe database operations
 - **Migration System**: Drizzle Kit for schema migrations
 - **Current Schema**: Users table with basic authentication fields
-- **Storage Abstraction**: Interface-based storage layer supporting both memory and database implementations
+- **Storage Implementation**: DatabaseStorage class using PostgreSQL backend
+- **Connection**: Neon serverless PostgreSQL with connection pooling
 
 ## Key Components
 
