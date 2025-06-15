@@ -1,12 +1,27 @@
 
+import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Plus, Eye, Edit, Crown } from "lucide-react";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import AddProductForm from "@/components/AddProductForm";
 
 const Dashboard = () => {
+  const [products, setProducts] = useState([
+    { title: "Email Marketing Mastery", type: "Course", status: "Approved" },
+    { title: "Landing Page Templates", type: "Template", status: "Pending" },
+    { title: "Social Media Toolkit", type: "Tool", status: "Approved" }
+  ]);
+  const [isAddProductSheetOpen, setIsAddProductSheetOpen] = useState(false);
+
+  const handleAddProduct = (newProduct: { title: string, type: string }) => {
+    setProducts(prevProducts => [...prevProducts, { ...newProduct, status: "Pending" }]);
+    console.log("Added new product:", { ...newProduct, status: "Pending" });
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
@@ -71,19 +86,31 @@ const Dashboard = () => {
                     <CardTitle>Your Products</CardTitle>
                     <CardDescription>Manage your courses, tools, and templates</CardDescription>
                   </div>
-                  <Button size="sm">
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add Product
-                  </Button>
+                  <Sheet open={isAddProductSheetOpen} onOpenChange={setIsAddProductSheetOpen}>
+                    <SheetTrigger asChild>
+                      <Button size="sm">
+                        <Plus className="h-4 w-4 mr-2" />
+                        Add Product
+                      </Button>
+                    </SheetTrigger>
+                    <SheetContent>
+                      <SheetHeader>
+                        <SheetTitle>Add a new product</SheetTitle>
+                        <SheetDescription>
+                          Fill in the details below to add a new product. It will be submitted for approval.
+                        </SheetDescription>
+                      </SheetHeader>
+                      <AddProductForm 
+                        onAddProduct={handleAddProduct}
+                        onDone={() => setIsAddProductSheetOpen(false)}
+                      />
+                    </SheetContent>
+                  </Sheet>
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {[
-                    { title: "Email Marketing Mastery", type: "Course", status: "Approved" },
-                    { title: "Landing Page Templates", type: "Template", status: "Pending" },
-                    { title: "Social Media Toolkit", type: "Tool", status: "Approved" }
-                  ].map((product, i) => (
+                  {products.map((product, i) => (
                     <div key={i} className="flex items-center justify-between p-4 border rounded-lg">
                       <div>
                         <h4 className="font-medium">{product.title}</h4>
