@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -33,9 +34,11 @@ const Dashboard = () => {
             <h1 className="text-3xl font-bold text-gray-900">Creator Dashboard</h1>
             <p className="text-gray-600 mt-2">Manage your profile and products</p>
           </div>
-          <Button className="flex items-center space-x-2">
-            <Eye className="h-4 w-4" />
-            <span>View Public Profile</span>
+          <Button asChild>
+            <Link to="/creator/john-doe">
+              <Eye />
+              <span>View Public Profile</span>
+            </Link>
           </Button>
         </div>
 
