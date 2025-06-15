@@ -1,276 +1,172 @@
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  User, 
-  Package, 
-  Crown, 
-  ExternalLink, 
-  Plus, 
-  Edit3, 
-  Eye,
-  FileText,
-  Lock
-} from "lucide-react";
-import { Link } from "react-router-dom";
 import Navigation from "@/components/Navigation";
-import { useToast } from "@/hooks/use-toast";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { Plus, Eye, Edit, Crown } from "lucide-react";
 
 const Dashboard = () => {
-  const { toast } = useToast();
-  const [profile, setProfile] = useState({
-    name: "Alex Creator",
-    bio: "Course creator helping developers build better apps",
-    avatar: "",
-    niche: "Web Development",
-    twitter: "@alexcreator",
-    linkedin: "alexcreator",
-    website: "alexcreator.com"
-  });
-
-  const [products] = useState([
-    {
-      id: 1,
-      title: "React Masterclass",
-      description: "Complete guide to React development",
-      link: "https://example.com/react-course",
-      category: "Course",
-      tags: ["React", "JavaScript", "Web Dev"],
-      status: "approved"
-    },
-    {
-      id: 2,
-      title: "UI Design Templates",
-      description: "50+ beautiful Figma templates",
-      link: "https://example.com/templates",
-      category: "Template",
-      tags: ["Design", "Figma", "UI"],
-      status: "pending"
-    }
-  ]);
-
-  const [isPremium] = useState(false);
-
-  const handleSaveProfile = () => {
-    toast({
-      title: "Profile Updated",
-      description: "Your profile has been saved successfully.",
-    });
-  };
-
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
       
       <div className="max-w-6xl mx-auto px-6 py-8">
-        <div className="flex justify-between items-start mb-8">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-primary mb-2">Creator Dashboard</h1>
-            <p className="text-gray-600">Manage your profile and products</p>
+            <h1 className="text-3xl font-bold text-gray-900">Creator Dashboard</h1>
+            <p className="text-gray-600 mt-2">Manage your profile and products</p>
           </div>
-          <div className="flex gap-3">
-            <Link to="/creator/alex-creator">
-              <Button variant="outline" className="flex items-center gap-2">
-                <Eye className="h-4 w-4" />
-                View Profile
-              </Button>
-            </Link>
-            {!isPremium && (
-              <Button className="bg-accent hover:bg-accent/90 flex items-center gap-2">
-                <Crown className="h-4 w-4" />
-                Upgrade to Pro
-              </Button>
-            )}
-          </div>
+          <Button className="flex items-center space-x-2">
+            <Eye className="h-4 w-4" />
+            <span>View Public Profile</span>
+          </Button>
         </div>
 
-        <Tabs defaultValue="profile" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="profile" className="flex items-center gap-2">
-              <User className="h-4 w-4" />
-              Profile
-            </TabsTrigger>
-            <TabsTrigger value="products" className="flex items-center gap-2">
-              <Package className="h-4 w-4" />
-              Products
-            </TabsTrigger>
-            <TabsTrigger value="resources" className="flex items-center gap-2">
-              <FileText className="h-4 w-4" />
-              {isPremium ? "Resources Hub" : <><Lock className="h-3 w-3" /> Premium</>}
-            </TabsTrigger>
-            <TabsTrigger value="analytics" className="flex items-center gap-2">
-              Analytics
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="profile">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Main Content */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Profile Overview */}
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <User className="h-5 w-5" />
-                  Profile Information
+                <CardTitle className="flex items-center space-x-2">
+                  <span>Profile Overview</span>
+                  <Badge variant="outline">Free Plan</Badge>
                 </CardTitle>
+                <CardDescription>
+                  Your public creator profile information
+                </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="name">Name</Label>
-                    <Input
-                      id="name"
-                      value={profile.name}
-                      onChange={(e) => setProfile({...profile, name: e.target.value})}
-                    />
+              <CardContent className="space-y-4">
+                <div className="flex items-center space-x-4">
+                  <div className="h-16 w-16 rounded-full bg-gray-200 flex items-center justify-center">
+                    <span className="text-xl font-semibold text-gray-600">JD</span>
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="niche">Niche</Label>
-                    <Input
-                      id="niche"
-                      value={profile.niche}
-                      onChange={(e) => setProfile({...profile, niche: e.target.value})}
-                    />
+                  <div>
+                    <h3 className="font-semibold">John Doe</h3>
+                    <p className="text-sm text-gray-600">Digital Marketing Expert</p>
+                    <p className="text-sm text-gray-500">john@example.com</p>
                   </div>
                 </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="bio">Bio</Label>
-                  <Textarea
-                    id="bio"
-                    value={profile.bio}
-                    onChange={(e) => setProfile({...profile, bio: e.target.value})}
-                    rows={3}
-                  />
-                </div>
-
-                <div className="grid md:grid-cols-3 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="twitter">Twitter</Label>
-                    <Input
-                      id="twitter"
-                      value={profile.twitter}
-                      onChange={(e) => setProfile({...profile, twitter: e.target.value})}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="linkedin">LinkedIn</Label>
-                    <Input
-                      id="linkedin"
-                      value={profile.linkedin}
-                      onChange={(e) => setProfile({...profile, linkedin: e.target.value})}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="website">Website</Label>
-                    <Input
-                      id="website"
-                      value={profile.website}
-                      onChange={(e) => setProfile({...profile, website: e.target.value})}
-                    />
-                  </div>
-                </div>
-
-                <Button onClick={handleSaveProfile} className="bg-accent hover:bg-accent/90">
-                  Save Profile
-                </Button>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="products">
-            <div className="space-y-6">
-              <div className="flex justify-between items-center">
+                <Separator />
                 <div>
-                  <h2 className="text-xl font-semibold">Your Products</h2>
-                  <p className="text-gray-600">Manage your courses, templates, and tools</p>
+                  <h4 className="font-medium mb-2">Bio</h4>
+                  <p className="text-sm text-gray-600">
+                    Helping entrepreneurs grow their online presence with proven strategies and actionable insights.
+                  </p>
                 </div>
-                <Button className="bg-accent hover:bg-accent/90 flex items-center gap-2">
-                  <Plus className="h-4 w-4" />
-                  Add Product
+                <Button variant="outline" size="sm" className="w-full">
+                  <Edit className="h-4 w-4 mr-2" />
+                  Edit Profile
                 </Button>
-              </div>
+              </CardContent>
+            </Card>
 
-              <div className="grid gap-4">
-                {products.map((product) => (
-                  <Card key={product.id}>
-                    <CardContent className="p-6">
-                      <div className="flex justify-between items-start">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-2">
-                            <h3 className="font-semibold text-lg">{product.title}</h3>
-                            <Badge 
-                              variant={product.status === 'approved' ? 'default' : 'secondary'}
-                              className={product.status === 'approved' ? 'bg-green-100 text-green-800' : ''}
-                            >
-                              {product.status}
-                            </Badge>
-                          </div>
-                          <p className="text-gray-600 mb-3">{product.description}</p>
-                          <div className="flex items-center gap-2 mb-3">
-                            <Badge variant="outline">{product.category}</Badge>
-                            {product.tags.map((tag) => (
-                              <Badge key={tag} variant="secondary" className="text-xs">
-                                {tag}
-                              </Badge>
-                            ))}
-                          </div>
-                          <a 
-                            href={product.link} 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="text-accent hover:underline flex items-center gap-1 text-sm"
+            {/* Products */}
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle>Your Products</CardTitle>
+                    <CardDescription>Manage your courses, tools, and templates</CardDescription>
+                  </div>
+                  <Button size="sm">
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Product
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {[
+                    { title: "Email Marketing Mastery", type: "Course", status: "Approved" },
+                    { title: "Landing Page Templates", type: "Template", status: "Pending" },
+                    { title: "Social Media Toolkit", type: "Tool", status: "Approved" }
+                  ].map((product, i) => (
+                    <div key={i} className="flex items-center justify-between p-4 border rounded-lg">
+                      <div>
+                        <h4 className="font-medium">{product.title}</h4>
+                        <div className="flex items-center space-x-2 mt-1">
+                          <Badge variant="secondary" className="text-xs">{product.type}</Badge>
+                          <Badge 
+                            variant={product.status === 'Approved' ? 'default' : 'outline'}
+                            className="text-xs"
                           >
-                            View Product <ExternalLink className="h-3 w-3" />
-                          </a>
+                            {product.status}
+                          </Badge>
                         </div>
-                        <Button variant="ghost" size="sm">
-                          <Edit3 className="h-4 w-4" />
-                        </Button>
                       </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="resources">
-            <Card>
-              <CardContent className="p-8 text-center">
-                {isPremium ? (
-                  <div>
-                    <h3 className="text-xl font-semibold mb-4">Premium Resources Hub</h3>
-                    <p className="text-gray-600">Access exclusive guides, templates, and tools</p>
-                  </div>
-                ) : (
-                  <div>
-                    <Lock className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                    <h3 className="text-xl font-semibold mb-4">Premium Resources Hub</h3>
-                    <p className="text-gray-600 mb-6">
-                      Unlock exclusive resources, guides, and tools to grow your creator business
-                    </p>
-                    <Button className="bg-accent hover:bg-accent/90">
-                      Upgrade to Premium
-                    </Button>
-                  </div>
-                )}
+                      <Button variant="ghost" size="sm">
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
               </CardContent>
             </Card>
-          </TabsContent>
+          </div>
 
-          <TabsContent value="analytics">
-            <Card>
-              <CardContent className="p-8 text-center">
-                <h3 className="text-xl font-semibold mb-4">Analytics Coming Soon</h3>
-                <p className="text-gray-600">Track your profile views, product clicks, and more</p>
+          {/* Sidebar */}
+          <div className="space-y-6">
+            {/* Upgrade Card */}
+            <Card className="border-accent">
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2 text-accent">
+                  <Crown className="h-5 w-5" />
+                  <span>Upgrade to Pro</span>
+                </CardTitle>
+                <CardDescription>
+                  Unlock premium features and grow faster
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <ul className="space-y-2 text-sm">
+                  <li className="flex items-center space-x-2">
+                    <div className="h-1.5 w-1.5 bg-accent rounded-full" />
+                    <span>Email capture on your profile</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <div className="h-1.5 w-1.5 bg-accent rounded-full" />
+                    <span>Remove CreatorStack branding</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <div className="h-1.5 w-1.5 bg-accent rounded-full" />
+                    <span>Custom domain support</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <div className="h-1.5 w-1.5 bg-accent rounded-full" />
+                    <span>Premium resources access</span>
+                  </li>
+                </ul>
+                <Button className="w-full bg-accent hover:bg-accent/90">
+                  Upgrade Now
+                </Button>
               </CardContent>
             </Card>
-          </TabsContent>
-        </Tabs>
+
+            {/* Stats */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Profile Stats</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex justify-between">
+                  <span className="text-sm text-gray-600">Profile Views</span>
+                  <span className="font-semibold">247</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm text-gray-600">Products</span>
+                  <span className="font-semibold">3</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm text-gray-600">This Month</span>
+                  <span className="font-semibold text-green-600">+23%</span>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -1,326 +1,231 @@
 
-import { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
+import Navigation from "@/components/Navigation";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { 
-  Search, 
-  ExternalLink, 
-  Filter, 
-  Star,
-  User
-} from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Search, ExternalLink, Star } from "lucide-react";
 import { Link } from "react-router-dom";
-import Navigation from "@/components/Navigation";
 
 const Explore = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedTag, setSelectedTag] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
-
-  const tags = ["Course", "Template", "Tool", "Ebook", "Community"];
-  const categories = ["Design", "Development", "Marketing", "Business", "Content"];
-
   const products = [
     {
       id: 1,
-      title: "React Masterclass",
-      description: "Complete guide to React development with hands-on projects",
-      creator: "Alex Creator",
-      creatorId: "alex-creator",
-      link: "https://example.com/react-course",
-      category: "Development",
-      tags: ["Course"],
-      price: "$99",
-      featured: true,
-      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face"
+      title: "Email Marketing Mastery",
+      description: "Complete course on building and monetizing email lists",
+      creator: "John Doe",
+      creatorId: "john-doe",
+      type: "Course",
+      category: "Marketing",
+      tags: ["Email", "Marketing", "Business"],
+      price: "$97",
+      featured: true
     },
     {
       id: 2,
-      title: "UI Design Templates",
-      description: "50+ beautiful Figma templates for modern web applications",
-      creator: "Sarah Designer",
-      creatorId: "sarah-designer",
-      link: "https://example.com/templates",
+      title: "UI/UX Design System",
+      description: "Professional design system for modern web apps",
+      creator: "Sarah Wilson",
+      creatorId: "sarah-wilson",
+      type: "Template",
       category: "Design",
-      tags: ["Template"],
-      price: "$49",
-      featured: false,
-      avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b999?w=40&h=40&fit=crop&crop=face"
+      tags: ["Design", "UI/UX", "Templates"],
+      price: "$79",
+      featured: false
     },
     {
       id: 3,
-      title: "Marketing Automation Guide",
-      description: "Step-by-step guide to automate your marketing processes",
-      creator: "Mike Marketer",
-      creatorId: "mike-marketer",
-      link: "https://example.com/marketing",
-      category: "Marketing",
-      tags: ["Ebook"],
-      price: "$29",
-      featured: true,
-      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face"
+      title: "AI Content Generator",
+      description: "Tool for generating marketing content with AI",
+      creator: "Mike Chen",
+      creatorId: "mike-chen",
+      type: "Tool",
+      category: "Technology",
+      tags: ["AI", "Content", "Automation"],
+      price: "$129",
+      featured: true
     },
     {
       id: 4,
-      title: "Productivity Toolkit",
-      description: "Essential tools and workflows to boost your efficiency",
-      creator: "Emma Producer",
-      creatorId: "emma-producer",
-      link: "https://example.com/productivity",
-      category: "Business",
-      tags: ["Tool"],
+      title: "Notion Business Templates",
+      description: "Complete business management templates for Notion",
+      creator: "Lisa Rodriguez",
+      creatorId: "lisa-rodriguez",
+      type: "Template",
+      category: "Productivity",
+      tags: ["Notion", "Business", "Templates"],
       price: "$39",
-      featured: false,
-      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face"
+      featured: false
     },
     {
       id: 5,
-      title: "Content Creator Masterclass",
-      description: "Learn how to create engaging content that converts",
-      creator: "David Content",
-      creatorId: "david-content",
-      link: "https://example.com/content",
-      category: "Content",
-      tags: ["Course"],
-      price: "$79",
-      featured: false,
-      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=40&h=40&fit=crop&crop=face"
+      title: "Social Media Course",
+      description: "Master social media marketing across all platforms",
+      creator: "David Kim",
+      creatorId: "david-kim",
+      type: "Course",
+      category: "Marketing",
+      tags: ["Social Media", "Marketing", "Strategy"],
+      price: "$89",
+      featured: false
     },
     {
       id: 6,
-      title: "Startup Pitch Templates",
-      description: "Professional presentation templates for startup pitches",
-      creator: "Lisa Startup",
-      creatorId: "lisa-startup",
-      link: "https://example.com/pitch",
+      title: "Startup Pitch Deck",
+      description: "Professional pitch deck template for startups",
+      creator: "Emma Thompson",
+      creatorId: "emma-thompson",
+      type: "Template",
       category: "Business",
-      tags: ["Template"],
-      price: "$59",
-      featured: true,
-      avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=40&h=40&fit=crop&crop=face"
+      tags: ["Startup", "Pitch", "Templates"],
+      price: "$49",
+      featured: true
     }
   ];
 
-  const filteredProducts = products.filter(product => {
-    const matchesSearch = product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         product.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         product.creator.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesTag = selectedTag === "" || product.tags.includes(selectedTag);
-    const matchesCategory = selectedCategory === "" || product.category === selectedCategory;
-    
-    return matchesSearch && matchesTag && matchesCategory;
-  });
-
-  const featuredProducts = filteredProducts.filter(product => product.featured);
-  const regularProducts = filteredProducts.filter(product => !product.featured);
+  const categories = ["All", "Marketing", "Design", "Technology", "Productivity", "Business"];
+  const productTypes = ["All", "Course", "Template", "Tool", "Guide"];
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
       
-      <div className="max-w-6xl mx-auto px-6 py-8">
+      <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-primary mb-4">Explore Creator Products</h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Discover amazing courses, templates, tools, and resources from top digital creators
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            Explore Digital Products
+          </h1>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Discover amazing courses, tools, and templates created by talented creators from around the world.
           </p>
         </div>
 
-        {/* Search and Filters */}
-        <Card className="mb-8">
-          <CardContent className="p-6">
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="flex-1 relative">
-                <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                <Input
-                  placeholder="Search products, creators, or topics..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-              
-              <div className="flex gap-2 flex-wrap">
-                <div className="flex items-center gap-2">
-                  <Filter className="h-4 w-4 text-gray-500" />
-                  <span className="text-sm text-gray-500">Filter by:</span>
-                </div>
-                
-                <select
-                  value={selectedTag}
-                  onChange={(e) => setSelectedTag(e.target.value)}
-                  className="px-3 py-2 border border-gray-300 rounded-md bg-white text-sm"
-                >
-                  <option value="">All Types</option>
-                  {tags.map(tag => (
-                    <option key={tag} value={tag}>{tag}</option>
-                  ))}
-                </select>
-                
-                <select
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="px-3 py-2 border border-gray-300 rounded-md bg-white text-sm"
-                >
-                  <option value="">All Categories</option>
-                  {categories.map(category => (
-                    <option key={category} value={category}>{category}</option>
-                  ))}
-                </select>
-              </div>
+        {/* Filters */}
+        <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Input placeholder="Search products..." className="pl-10" />
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Featured Products */}
-        {featuredProducts.length > 0 && (
-          <div className="mb-12">
-            <div className="flex items-center gap-2 mb-6">
-              <Star className="h-5 w-5 text-yellow-500" />
-              <h2 className="text-2xl font-bold text-primary">Featured Products</h2>
-            </div>
-            
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {featuredProducts.map((product) => (
-                <Card key={product.id} className="hover:shadow-lg transition-all duration-300 border-2 border-yellow-200">
-                  <CardContent className="p-6">
-                    <div className="flex items-center justify-between mb-3">
-                      <Badge className="bg-yellow-100 text-yellow-800">Featured</Badge>
-                      <span className="font-semibold text-accent">{product.price}</span>
-                    </div>
-                    
-                    <h3 className="font-semibold text-lg mb-2">{product.title}</h3>
-                    <p className="text-gray-600 mb-4 text-sm leading-relaxed">
-                      {product.description}
-                    </p>
-                    
-                    <div className="flex items-center gap-2 mb-4">
-                      <img
-                        src={product.avatar}
-                        alt={product.creator}
-                        className="w-6 h-6 rounded-full"
-                      />
-                      <Link
-                        to={`/creator/${product.creatorId}`}
-                        className="text-sm text-gray-600 hover:text-accent transition-colors"
-                      >
-                        {product.creator}
-                      </Link>
-                    </div>
-                    
-                    <div className="flex flex-wrap gap-1 mb-4">
-                      <Badge variant="outline">{product.category}</Badge>
-                      {product.tags.map((tag) => (
-                        <Badge key={tag} variant="secondary" className="text-xs">
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
-                    
-                    <div className="flex gap-2">
-                      <a
-                        href={product.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex-1"
-                      >
-                        <Button className="w-full bg-accent hover:bg-accent/90 flex items-center justify-center gap-2">
-                          View Product
-                          <ExternalLink className="h-4 w-4" />
-                        </Button>
-                      </a>
-                      <Link to={`/creator/${product.creatorId}`}>
-                        <Button variant="outline" size="icon">
-                          <User className="h-4 w-4" />
-                        </Button>
-                      </Link>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+            <Select>
+              <SelectTrigger>
+                <SelectValue placeholder="Category" />
+              </SelectTrigger>
+              <SelectContent>
+                {categories.map((category) => (
+                  <SelectItem key={category} value={category.toLowerCase()}>
+                    {category}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select>
+              <SelectTrigger>
+                <SelectValue placeholder="Product Type" />
+              </SelectTrigger>
+              <SelectContent>
+                {productTypes.map((type) => (
+                  <SelectItem key={type} value={type.toLowerCase()}>
+                    {type}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Button variant="outline" className="w-full">
+              Clear Filters
+            </Button>
           </div>
-        )}
+        </div>
 
-        {/* All Products */}
-        <div className="space-y-6">
-          <h2 className="text-2xl font-bold text-primary">
-            All Products ({regularProducts.length})
+        {/* Featured Section */}
+        <div className="mb-12">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+            <Star className="h-6 w-6 text-yellow-500 mr-2" />
+            Featured Products
           </h2>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {regularProducts.map((product) => (
-              <Card key={product.id} className="hover:shadow-lg transition-shadow">
-                <CardContent className="p-6">
-                  <div className="flex justify-between items-start mb-3">
-                    <Badge variant="outline">{product.category}</Badge>
-                    <span className="font-semibold text-accent">{product.price}</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {products.filter(product => product.featured).map((product) => (
+              <Card key={product.id} className="hover:shadow-lg transition-shadow border-accent/20">
+                <CardHeader>
+                  <div className="flex items-start justify-between mb-2">
+                    <div className="flex items-center space-x-2">
+                      <Badge variant="secondary">{product.type}</Badge>
+                      <Badge variant="outline" className="text-xs">Featured</Badge>
+                    </div>
+                    <span className="font-bold text-accent">{product.price}</span>
                   </div>
-                  
-                  <h3 className="font-semibold text-lg mb-2">{product.title}</h3>
-                  <p className="text-gray-600 mb-4 text-sm leading-relaxed">
-                    {product.description}
-                  </p>
-                  
-                  <div className="flex items-center gap-2 mb-4">
-                    <img
-                      src={product.avatar}
-                      alt={product.creator}
-                      className="w-6 h-6 rounded-full"
-                    />
-                    <Link
+                  <CardTitle className="text-lg">{product.title}</CardTitle>
+                  <CardDescription>{product.description}</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex items-center space-x-2">
+                    <div className="h-6 w-6 rounded-full bg-gray-200" />
+                    <Link 
                       to={`/creator/${product.creatorId}`}
-                      className="text-sm text-gray-600 hover:text-accent transition-colors"
+                      className="text-sm font-medium text-gray-700 hover:text-accent"
                     >
                       {product.creator}
                     </Link>
                   </div>
-                  
-                  <div className="flex flex-wrap gap-1 mb-4">
+                  <div className="flex flex-wrap gap-1">
                     {product.tags.map((tag) => (
-                      <Badge key={tag} variant="secondary" className="text-xs">
+                      <Badge key={tag} variant="outline" className="text-xs">
                         {tag}
                       </Badge>
                     ))}
                   </div>
-                  
-                  <div className="flex gap-2">
-                    <a
-                      href={product.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-1"
-                    >
-                      <Button className="w-full bg-accent hover:bg-accent/90 flex items-center justify-center gap-2">
-                        View Product
-                        <ExternalLink className="h-4 w-4" />
-                      </Button>
-                    </a>
-                    <Link to={`/creator/${product.creatorId}`}>
-                      <Button variant="outline" size="icon">
-                        <User className="h-4 w-4" />
-                      </Button>
-                    </Link>
-                  </div>
+                  <Button className="w-full">
+                    View Product
+                    <ExternalLink className="h-4 w-4 ml-2" />
+                  </Button>
                 </CardContent>
               </Card>
             ))}
           </div>
         </div>
 
-        {filteredProducts.length === 0 && (
-          <Card className="mt-8">
-            <CardContent className="p-12 text-center">
-              <h3 className="text-xl font-semibold mb-4">No products found</h3>
-              <p className="text-gray-600">
-                Try adjusting your search terms or filters to find what you're looking for.
-              </p>
-            </CardContent>
-          </Card>
-        )}
+        {/* All Products */}
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">All Products</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {products.map((product) => (
+              <Card key={product.id} className="hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <div className="flex items-start justify-between mb-2">
+                    <Badge variant="secondary">{product.type}</Badge>
+                    <span className="font-bold text-accent">{product.price}</span>
+                  </div>
+                  <CardTitle className="text-lg">{product.title}</CardTitle>
+                  <CardDescription>{product.description}</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex items-center space-x-2">
+                    <div className="h-6 w-6 rounded-full bg-gray-200" />
+                    <Link 
+                      to={`/creator/${product.creatorId}`}
+                      className="text-sm font-medium text-gray-700 hover:text-accent"
+                    >
+                      {product.creator}
+                    </Link>
+                  </div>
+                  <div className="flex flex-wrap gap-1">
+                    {product.tags.map((tag) => (
+                      <Badge key={tag} variant="outline" className="text-xs">
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
+                  <Button className="w-full">
+                    View Product
+                    <ExternalLink className="h-4 w-4 ml-2" />
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

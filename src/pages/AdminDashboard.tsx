@@ -1,244 +1,217 @@
 
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Navigation from "@/components/Navigation";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  CheckCircle, 
-  XCircle, 
-  Star, 
-  Users, 
-  Package,
-  Shield,
-  TrendingUp
-} from "lucide-react";
-import Navigation from "@/components/Navigation";
-import { useToast } from "@/hooks/use-toast";
+import { Check, X, Star, Users, Package, Eye } from "lucide-react";
 
 const AdminDashboard = () => {
-  const { toast } = useToast();
-  
-  const [pendingProducts] = useState([
+  const pendingProducts = [
     {
       id: 1,
-      title: "Advanced JavaScript Course",
-      description: "Deep dive into JavaScript concepts",
-      creator: "John Developer",
-      category: "Course",
-      tags: ["JavaScript", "Programming"],
-      status: "pending"
+      title: "Advanced React Patterns",
+      creator: "John Smith",
+      type: "Course",
+      submittedDate: "2024-01-15",
+      description: "Deep dive into advanced React patterns and best practices"
     },
     {
       id: 2,
-      title: "Design System Templates",
-      description: "Complete design system for web apps",
-      creator: "Mary Designer",
-      category: "Template",
-      tags: ["Design", "UI/UX"],
-      status: "pending"
+      title: "Marketing Email Templates",
+      creator: "Sarah Jones",
+      type: "Template",
+      submittedDate: "2024-01-14",
+      description: "Collection of high-converting email templates"
     }
-  ]);
+  ];
 
-  const [creators] = useState([
+  const users = [
     {
       id: 1,
-      name: "Alex Creator",
-      email: "alex@example.com",
+      name: "John Doe",
+      email: "john@example.com",
       plan: "Premium",
-      products: 3,
-      status: "active"
+      joinDate: "2024-01-10",
+      products: 3
     },
     {
       id: 2,
-      name: "Sarah Designer",
+      name: "Sarah Wilson",
       email: "sarah@example.com",
       plan: "Free",
-      products: 1,
-      status: "active"
+      joinDate: "2024-01-12",
+      products: 1
     }
-  ]);
-
-  const handleApproveProduct = (productId: number) => {
-    toast({
-      title: "Product Approved",
-      description: "The product has been approved and is now live in the explore directory.",
-    });
-  };
-
-  const handleRejectProduct = (productId: number) => {
-    toast({
-      title: "Product Rejected",
-      description: "The product has been rejected and the creator has been notified.",
-    });
-  };
-
-  const handleToggleFeatured = (productId: number) => {
-    toast({
-      title: "Featured Status Updated",
-      description: "The product's featured status has been updated.",
-    });
-  };
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
       
-      <div className="max-w-6xl mx-auto px-6 py-8">
-        <div className="flex items-center gap-2 mb-8">
-          <Shield className="h-8 w-8 text-accent" />
-          <div>
-            <h1 className="text-3xl font-bold text-primary">Admin Dashboard</h1>
-            <p className="text-gray-600">Manage creators, products, and platform features</p>
-          </div>
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+          <p className="text-gray-600 mt-2">Manage platform content and users</p>
         </div>
 
-        {/* Stats Overview */}
-        <div className="grid md:grid-cols-4 gap-6 mb-8">
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <Card>
-            <CardContent className="p-6 text-center">
-              <Users className="h-8 w-8 text-accent mx-auto mb-2" />
-              <div className="text-2xl font-bold">127</div>
-              <div className="text-sm text-gray-600">Total Creators</div>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Total Users</CardTitle>
+              <Users className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">1,247</div>
+              <p className="text-xs text-muted-foreground">+12% from last month</p>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="p-6 text-center">
-              <Package className="h-8 w-8 text-green-500 mx-auto mb-2" />
-              <div className="text-2xl font-bold">342</div>
-              <div className="text-sm text-gray-600">Approved Products</div>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Total Products</CardTitle>
+              <Package className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">89</div>
+              <p className="text-xs text-muted-foreground">+5 pending approval</p>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="p-6 text-center">
-              <TrendingUp className="h-8 w-8 text-yellow-500 mx-auto mb-2" />
-              <div className="text-2xl font-bold">23</div>
-              <div className="text-sm text-gray-600">Pending Review</div>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Premium Users</CardTitle>
+              <Star className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">156</div>
+              <p className="text-xs text-muted-foreground">12.5% conversion rate</p>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="p-6 text-center">
-              <Star className="h-8 w-8 text-purple-500 mx-auto mb-2" />
-              <div className="text-2xl font-bold">12</div>
-              <div className="text-sm text-gray-600">Featured Products</div>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Page Views</CardTitle>
+              <Eye className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">24,561</div>
+              <p className="text-xs text-muted-foreground">+18% from last month</p>
             </CardContent>
           </Card>
         </div>
 
-        <Tabs defaultValue="products" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="products">Product Review</TabsTrigger>
-            <TabsTrigger value="creators">Creators</TabsTrigger>
-            <TabsTrigger value="resources">Resources Hub</TabsTrigger>
+        {/* Main Content */}
+        <Tabs defaultValue="pending" className="space-y-6">
+          <TabsList>
+            <TabsTrigger value="pending">Pending Approvals</TabsTrigger>
+            <TabsTrigger value="users">Users</TabsTrigger>
+            <TabsTrigger value="featured">Featured Content</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="products">
-            <div className="space-y-6">
-              <div>
-                <h2 className="text-xl font-semibold mb-4">Pending Product Approvals</h2>
+          <TabsContent value="pending" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Pending Product Approvals</CardTitle>
+                <CardDescription>
+                  Review and approve or reject submitted products
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
                 <div className="space-y-4">
                   {pendingProducts.map((product) => (
-                    <Card key={product.id}>
-                      <CardContent className="p-6">
-                        <div className="flex justify-between items-start">
-                          <div className="flex-1">
-                            <h3 className="font-semibold text-lg mb-2">{product.title}</h3>
-                            <p className="text-gray-600 mb-3">{product.description}</p>
-                            <div className="flex items-center gap-2 mb-3">
-                              <span className="text-sm text-gray-500">by {product.creator}</span>
-                              <Badge variant="outline">{product.category}</Badge>
-                              {product.tags.map((tag) => (
-                                <Badge key={tag} variant="secondary" className="text-xs">
-                                  {tag}
-                                </Badge>
-                              ))}
-                            </div>
-                          </div>
-                          <div className="flex gap-2 ml-4">
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => handleToggleFeatured(product.id)}
-                              className="flex items-center gap-1"
-                            >
-                              <Star className="h-4 w-4" />
-                              Feature
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => handleRejectProduct(product.id)}
-                              className="text-red-600 hover:text-red-700 flex items-center gap-1"
-                            >
-                              <XCircle className="h-4 w-4" />
-                              Reject
-                            </Button>
-                            <Button
-                              size="sm"
-                              onClick={() => handleApproveProduct(product.id)}
-                              className="bg-green-600 hover:bg-green-700 flex items-center gap-1"
-                            >
-                              <CheckCircle className="h-4 w-4" />
-                              Approve
-                            </Button>
-                          </div>
+                    <div key={product.id} className="flex items-center justify-between p-4 border rounded-lg">
+                      <div className="flex-1">
+                        <h4 className="font-medium">{product.title}</h4>
+                        <p className="text-sm text-gray-600">{product.description}</p>
+                        <div className="flex items-center space-x-4 mt-2">
+                          <span className="text-sm text-gray-500">by {product.creator}</span>
+                          <Badge variant="secondary">{product.type}</Badge>
+                          <span className="text-sm text-gray-500">
+                            Submitted {product.submittedDate}
+                          </span>
                         </div>
-                      </CardContent>
-                    </Card>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Button size="sm" variant="outline">
+                          <Eye className="h-4 w-4 mr-2" />
+                          Preview
+                        </Button>
+                        <Button size="sm" variant="outline" className="text-green-600 hover:text-green-700">
+                          <Check className="h-4 w-4 mr-2" />
+                          Approve
+                        </Button>
+                        <Button size="sm" variant="outline" className="text-red-600 hover:text-red-700">
+                          <X className="h-4 w-4 mr-2" />
+                          Reject
+                        </Button>
+                      </div>
+                    </div>
                   ))}
                 </div>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
-          <TabsContent value="creators">
-            <div className="space-y-6">
-              <h2 className="text-xl font-semibold">Creator Management</h2>
-              <div className="space-y-4">
-                {creators.map((creator) => (
-                  <Card key={creator.id}>
-                    <CardContent className="p-6">
-                      <div className="flex justify-between items-center">
+          <TabsContent value="users" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>User Management</CardTitle>
+                <CardDescription>
+                  View and manage platform users
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {users.map((user) => (
+                    <div key={user.id} className="flex items-center justify-between p-4 border rounded-lg">
+                      <div className="flex items-center space-x-4">
+                        <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                          <span className="text-sm font-medium">
+                            {user.name.split(' ').map(n => n[0]).join('')}
+                          </span>
+                        </div>
                         <div>
-                          <h3 className="font-semibold">{creator.name}</h3>
-                          <p className="text-sm text-gray-600">{creator.email}</p>
-                          <div className="flex items-center gap-2 mt-2">
-                            <Badge variant={creator.plan === 'Premium' ? 'default' : 'secondary'}>
-                              {creator.plan}
+                          <h4 className="font-medium">{user.name}</h4>
+                          <p className="text-sm text-gray-600">{user.email}</p>
+                          <div className="flex items-center space-x-2 mt-1">
+                            <Badge 
+                              variant={user.plan === 'Premium' ? 'default' : 'secondary'}
+                              className="text-xs"
+                            >
+                              {user.plan}
                             </Badge>
-                            <span className="text-sm text-gray-500">
-                              {creator.products} products
+                            <span className="text-xs text-gray-500">
+                              {user.products} products
+                            </span>
+                            <span className="text-xs text-gray-500">
+                              Joined {user.joinDate}
                             </span>
                           </div>
                         </div>
-                        <div className="flex gap-2">
-                          <Button variant="outline" size="sm">
-                            View Profile
-                          </Button>
-                          <Button variant="outline" size="sm">
-                            Contact
-                          </Button>
-                        </div>
                       </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </div>
+                      <Button size="sm" variant="outline">
+                        View Profile
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
-          <TabsContent value="resources">
+          <TabsContent value="featured" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Premium Resources Hub</CardTitle>
+                <CardTitle>Featured Content Management</CardTitle>
+                <CardDescription>
+                  Manage featured creators and products
+                </CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">
-                  Manage exclusive content for premium creators
-                </p>
-                <Button className="bg-accent hover:bg-accent/90">
-                  Add New Resource
-                </Button>
+                <div className="text-center py-8">
+                  <Star className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <p className="text-gray-600">Featured content management coming soon</p>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
