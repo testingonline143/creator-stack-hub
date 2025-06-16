@@ -4,8 +4,24 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { User, Package, Users, Settings } from "lucide-react";
+import { 
+  User, 
+  Package, 
+  Users, 
+  Settings, 
+  TrendingUp, 
+  Star, 
+  PlayCircle, 
+  FileText,
+  Calendar,
+  DollarSign,
+  Eye,
+  ChevronRight,
+  Bell,
+  Upload
+} from "lucide-react";
 import { Link, useLocation } from "wouter";
+import Sidebar from "@/components/Sidebar";
 
 interface Creator {
   id: number;
@@ -71,163 +87,181 @@ export default function AuthDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div className="flex items-center space-x-4">
-              <h1 className="text-2xl font-bold text-gray-900">CreatorStack Dashboard</h1>
-            </div>
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <User className="w-5 h-5" />
-                <span className="text-sm font-medium">{user.user?.name}</span>
+    <div className="min-h-screen bg-gray-50 flex">
+      <Sidebar />
+      
+      <div className="flex-1">
+        {/* Header */}
+        <div className="bg-white shadow-sm border-b">
+          <div className="px-6 py-4">
+            <div className="flex justify-between items-center">
+              <div className="flex items-center space-x-4">
+                <Bell className="w-5 h-5 text-yellow-500" />
+                <span className="text-sm text-gray-600">Your subscription renews on July 16, 2025.</span>
+                <Button variant="outline" size="sm">Go to settings</Button>
               </div>
-              <Button variant="outline" onClick={handleLogout}>
-                Logout
-              </Button>
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2">
+                  <User className="w-5 h-5" />
+                  <span className="text-sm font-medium">{user?.name}</span>
+                </div>
+                <Button variant="outline" onClick={handleLogout}>
+                  Logout
+                </Button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Welcome Section */}
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">
-            Welcome back, {user.user?.name}!
-          </h2>
-          <p className="text-gray-600">
-            Explore digital creators and their products in your personalized dashboard.
-          </p>
-        </div>
-
-        {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Link href="/explore">
-            <Card className="hover:shadow-md transition-shadow cursor-pointer">
-              <CardHeader className="flex flex-row items-center space-y-0 pb-2">
-                <Users className="w-6 h-6 text-blue-600" />
-                <CardTitle className="text-lg ml-2">Explore Creators</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-gray-600">
-                  Discover amazing digital creators and their work
-                </p>
-              </CardContent>
-            </Card>
-          </Link>
-
-          <Link href="/products">
-            <Card className="hover:shadow-md transition-shadow cursor-pointer">
-              <CardHeader className="flex flex-row items-center space-y-0 pb-2">
-                <Package className="w-6 h-6 text-green-600" />
-                <CardTitle className="text-lg ml-2">Browse Products</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-gray-600">
-                  Explore digital products, courses, and tools
-                </p>
-              </CardContent>
-            </Card>
-          </Link>
-
-          <Card className="hover:shadow-md transition-shadow">
-            <CardHeader className="flex flex-row items-center space-y-0 pb-2">
-              <Settings className="w-6 h-6 text-purple-600" />
-              <CardTitle className="text-lg ml-2">Account Settings</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-gray-600">
-                Manage your profile and preferences
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <Card>
+        {/* Main Content */}
+        <div className="p-6">
+          {/* Today's Success Story */}
+          <Card className="mb-6">
             <CardHeader>
-              <CardTitle className="flex items-center">
-                <Users className="w-5 h-5 mr-2" />
-                Creators ({creators.length})
+              <CardTitle className="flex items-center text-lg">
+                <Star className="w-5 h-5 mr-2 text-yellow-500" />
+                Today's Creator Success Story
               </CardTitle>
-              <CardDescription>
-                Digital creators in the platform
-              </CardDescription>
             </CardHeader>
             <CardContent>
-              {loadingCreators ? (
-                <div className="space-y-2">
-                  <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
-                  <div className="h-4 bg-gray-200 rounded animate-pulse w-2/3"></div>
+              <div className="flex items-start space-x-4">
+                <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
+                  <User className="w-8 h-8 text-gray-500" />
                 </div>
-              ) : (
-                <div className="space-y-2">
-                  {creators.slice(0, 3).map((creator: Creator) => (
-                    <div key={creator.id} className="flex items-center justify-between">
-                      <div>
-                        <p className="font-medium">{creator.name}</p>
-                        <p className="text-sm text-gray-600">@{creator.username}</p>
-                      </div>
-                      {creator.isPremium && (
-                        <Badge variant="secondary">Premium</Badge>
-                      )}
-                    </div>
-                  ))}
-                  {creators.length > 3 && (
-                    <p className="text-sm text-gray-500">
-                      +{creators.length - 3} more creators
-                    </p>
-                  )}
+                <div className="flex-1">
+                  <h3 className="font-semibold text-lg mb-1">Sarah's Journey from Student to 6-Figure Creator</h3>
+                  <p className="text-gray-600 mb-3">
+                    Sarah started with college vlogs and turned it into a multi-platform creator career — 
+                    powered by aesthetics, structure, and smart pivots. This case study breaks down how she...
+                  </p>
+                  <div className="flex items-center space-x-4 text-sm text-gray-500">
+                    <span className="flex items-center">
+                      <DollarSign className="w-4 h-4 mr-1 text-green-600" />
+                      $120,000 Monthly Revenue
+                    </span>
+                    <span className="flex items-center">
+                      <Users className="w-4 h-4 mr-1" />
+                      2.1M Followers
+                    </span>
+                    <Button variant="outline" size="sm" className="ml-auto">
+                      Click to read more
+                      <ChevronRight className="w-4 h-4 ml-1" />
+                    </Button>
+                  </div>
                 </div>
-              )}
+              </div>
             </CardContent>
           </Card>
 
-          <Card>
+          {/* Today's Content Spotlight */}
+          <Card className="mb-6">
             <CardHeader>
-              <CardTitle className="flex items-center">
-                <Package className="w-5 h-5 mr-2" />
-                Products ({products.length})
+              <CardTitle className="flex items-center text-lg">
+                <TrendingUp className="w-5 h-5 mr-2 text-blue-500" />
+                Today's Content Spotlight
               </CardTitle>
-              <CardDescription>
-                Available digital products and tools
-              </CardDescription>
+              <CardDescription>Fresh insights and trending content ideas</CardDescription>
             </CardHeader>
             <CardContent>
-              {loadingProducts ? (
-                <div className="space-y-2">
-                  <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
-                  <div className="h-4 bg-gray-200 rounded animate-pulse w-2/3"></div>
+              <div className="space-y-4">
+                <div className="border-l-4 border-blue-500 pl-4">
+                  <h4 className="font-semibold mb-1">10 Million View Strategy (Tech + Productivity)</h4>
+                  <p className="text-sm text-gray-600 mb-2">
+                    Weekday by Maria: a TikTok creator, posted a video where she talks about the importance 
+                    of eating high-fiber. If you're eating high-protein and it's a masterclass in creating viral...
+                  </p>
+                  <div className="flex items-center space-x-2 text-xs text-gray-500">
+                    <Badge variant="outline">Tech</Badge>
+                    <span>Key Moments</span>
+                    <Button variant="link" size="sm" className="p-0 h-auto text-xs">
+                      Click to view detailed analysis
+                    </Button>
+                  </div>
                 </div>
-              ) : (
-                <div className="space-y-2">
-                  {products.slice(0, 3).map((product: Product) => (
-                    <div key={product.id} className="flex items-center justify-between">
-                      <div>
-                        <p className="font-medium">{product.title}</p>
-                        <p className="text-sm text-gray-600">
-                          {product.description?.slice(0, 50)}...
-                        </p>
-                      </div>
-                      <Badge 
-                        variant={product.status === "approved" ? "default" : "secondary"}
-                      >
-                        {product.status}
-                      </Badge>
-                    </div>
-                  ))}
-                  {products.length > 3 && (
-                    <p className="text-sm text-gray-500">
-                      +{products.length - 3} more products
-                    </p>
-                  )}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Creator Interview Spotlight */}
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle className="flex items-center text-lg">
+                <PlayCircle className="w-5 h-5 mr-2 text-red-500" />
+                Creator Interview Spotlight
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="bg-black rounded-lg overflow-hidden">
+                <div className="aspect-video flex items-center justify-center">
+                  <div className="text-center text-white">
+                    <PlayCircle className="w-16 h-16 mx-auto mb-2" />
+                    <p className="text-lg font-semibold">"I have A PLAN"</p>
+                  </div>
                 </div>
-              )}
+              </div>
+              <div className="mt-4">
+                <h4 className="font-semibold mb-1">How He Makes $25k/MONTH on YouTube</h4>
+                <p className="text-sm text-gray-600 mb-2">VLOGGER INTERVIEW</p>
+                <div className="flex items-center space-x-4 text-sm text-gray-500">
+                  <span className="flex items-center">
+                    <Eye className="w-4 h-4 mr-1" />
+                    248K views
+                  </span>
+                  <span>3 weeks ago</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Quick Actions */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <Card className="hover:shadow-md transition-shadow cursor-pointer">
+              <CardHeader className="flex flex-row items-center space-y-0 pb-2">
+                <Upload className="w-6 h-6 text-orange-600" />
+                <CardTitle className="text-lg ml-2">Submit Your Story</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-gray-600">
+                  Share your creator journey and inspire others
+                </p>
+              </CardContent>
+            </Card>
+
+            <Link href="/explore">
+              <Card className="hover:shadow-md transition-shadow cursor-pointer">
+                <CardHeader className="flex flex-row items-center space-y-0 pb-2">
+                  <Users className="w-6 h-6 text-blue-600" />
+                  <CardTitle className="text-lg ml-2">Discover Creators</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-600">
+                    Explore successful creators and their strategies
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Card className="hover:shadow-md transition-shadow cursor-pointer">
+              <CardHeader className="flex flex-row items-center space-y-0 pb-2">
+                <FileText className="w-6 h-6 text-green-600" />
+                <CardTitle className="text-lg ml-2">Content Ideas</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-gray-600">
+                  Get fresh content ideas and trending topics
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Account Management */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Account Management</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-600 mb-4">Need to reactivate your account?</p>
+              <Button>Manage Account</Button>
             </CardContent>
           </Card>
         </div>
