@@ -28,7 +28,8 @@ export default function Signup() {
         title: "Success",
         description: "Account created successfully!",
       });
-      setLocation("/dashboard");
+      // Force a page reload to update auth state
+      window.location.href = "/dashboard";
     } catch (error: any) {
       toast({
         title: "Error",

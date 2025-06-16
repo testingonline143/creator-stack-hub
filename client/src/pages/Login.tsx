@@ -26,7 +26,8 @@ export default function Login() {
         title: "Success",
         description: "Logged in successfully!",
       });
-      setLocation("/dashboard");
+      // Force a page reload to update auth state
+      window.location.href = "/dashboard";
     } catch (error: any) {
       toast({
         title: "Error",

@@ -3,6 +3,8 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { login, register, requireAuth } from "./auth";
 import session from "express-session";
+import connectPgSimple from "connect-pg-simple";
+import { pool } from "./db";
 import { 
   insertCreatorSchema, 
   insertProductSchema, 
@@ -14,8 +16,14 @@ import {
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  const PgSession = connectPgSimple(session);
+  
   // Session configuration
   app.use(session({
+    store: new PgSession({
+      pool: pool,
+      tableName: 'session'
+    }),
     secret: process.env.SESSION_SECRET || "dev-secret-key",
     resave: false,
     saveUninitialized: false,
