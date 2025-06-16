@@ -23,37 +23,18 @@ import {
 import { Link, useLocation } from "wouter";
 import Sidebar from "@/components/Sidebar";
 
-interface Creator {
+interface User {
   id: number;
-  name: string;
-  username: string;
   email: string;
-  bio?: string;
-  isPremium: boolean;
-}
-
-interface Product {
-  id: number;
-  title: string;
-  description?: string;
-  link: string;
-  status: "draft" | "submitted" | "approved" | "rejected";
-  creatorId: number;
+  username: string;
+  name: string;
 }
 
 export default function AuthDashboard() {
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const logout = useLogout();
   const { toast } = useToast();
   const [, setLocation] = useLocation();
-
-  const { data: creators = [], isLoading: loadingCreators } = useQuery({
-    queryKey: ["/api/creators"],
-  });
-
-  const { data: products = [], isLoading: loadingProducts } = useQuery({
-    queryKey: ["/api/products"],
-  });
 
   const handleLogout = async () => {
     try {
@@ -72,7 +53,7 @@ export default function AuthDashboard() {
     }
   };
 
-  if (!user) {
+  if (!isAuthenticated || !user) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -85,6 +66,8 @@ export default function AuthDashboard() {
       </div>
     );
   }
+
+  const userData = (user as any)?.user || user;
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
@@ -103,7 +86,7 @@ export default function AuthDashboard() {
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-2">
                   <User className="w-5 h-5" />
-                  <span className="text-sm font-medium">{user?.name}</span>
+                  <span className="text-sm font-medium">{userData?.name || "User"}</span>
                 </div>
                 <Button variant="outline" onClick={handleLogout}>
                   Logout
