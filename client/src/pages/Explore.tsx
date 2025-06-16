@@ -1,12 +1,11 @@
-
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, ExternalLink, Star, Filter, SlidersHorizontal, TrendingUp, Crown, User } from "lucide-react";
+import { Search, ExternalLink, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
@@ -32,7 +31,6 @@ const Explore = () => {
       creatorId: "john-doe",
       type: "Course",
       tags: ["Email", "Marketing", "Business"],
-      price: "$97",
       featured: true,
       rating: 4.8,
       students: 1247
@@ -45,7 +43,6 @@ const Explore = () => {
       creatorId: "mike-chen",
       type: "Tool",
       tags: ["AI", "Content", "Automation"],
-      price: "$129",
       featured: true,
       rating: 4.9,
       students: 892
@@ -58,18 +55,17 @@ const Explore = () => {
       creatorId: "emma-thompson", 
       type: "Template",
       tags: ["Startup", "Pitch", "Templates"],
-      price: "$49",
       featured: true,
       rating: 4.7,
       students: 2156
     }
   ];
 
-  const popularTags = ["AI", "Marketing", "Design", "Business", "Templates", "Automation", "Course", "Tool", "Free", "Notion"];
+  const categories = ["All", "AI", "Marketing", "Design", "Business", "Templates", "Automation", "Free", "Notion"];
   const productTypes = ["All", "Course", "Template", "Tool", "Guide"];
 
   // Filter products based on selected filters and search
-  const filteredProducts = products.filter(product => {
+  const filteredProducts = products.filter((product: any) => {
     const matchesSearch = !searchQuery || 
       product.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       product.description?.toLowerCase().includes(searchQuery.toLowerCase());
@@ -103,33 +99,46 @@ const Explore = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-              <Input placeholder="Search products..." className="pl-10" />
+              <Input 
+                placeholder="Search products..." 
+                className="pl-10"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
             </div>
-            <Select>
+            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
               <SelectTrigger>
                 <SelectValue placeholder="Category" />
               </SelectTrigger>
               <SelectContent>
                 {categories.map((category) => (
-                  <SelectItem key={category} value={category.toLowerCase()}>
+                  <SelectItem key={category} value={category}>
                     {category}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
-            <Select>
+            <Select value={selectedType} onValueChange={setSelectedType}>
               <SelectTrigger>
                 <SelectValue placeholder="Product Type" />
               </SelectTrigger>
               <SelectContent>
                 {productTypes.map((type) => (
-                  <SelectItem key={type} value={type.toLowerCase()}>
+                  <SelectItem key={type} value={type}>
                     {type}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
-            <Button variant="outline" className="w-full">
+            <Button 
+              variant="outline" 
+              className="w-full"
+              onClick={() => {
+                setSelectedCategory("All");
+                setSelectedType("All");
+                setSearchQuery("");
+              }}
+            >
               Clear Filters
             </Button>
           </div>
@@ -142,7 +151,7 @@ const Explore = () => {
             Featured Products
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {products.filter(product => product.featured).map((product) => (
+            {featuredProducts.map((product) => (
               <Card key={product.id} className="hover:shadow-lg transition-shadow border-accent/20">
                 <CardHeader>
                   <div className="flex items-start justify-between mb-2">
@@ -150,7 +159,6 @@ const Explore = () => {
                       <Badge variant="secondary">{product.type}</Badge>
                       <Badge variant="outline" className="text-xs">Featured</Badge>
                     </div>
-                    <span className="font-bold text-accent">{product.price}</span>
                   </div>
                   <CardTitle className="text-lg">{product.title}</CardTitle>
                   <CardDescription>{product.description}</CardDescription>
@@ -166,7 +174,7 @@ const Explore = () => {
                     </Link>
                   </div>
                   <div className="flex flex-wrap gap-1">
-                    {product.tags.map((tag) => (
+                    {product.tags.map((tag: string) => (
                       <Badge key={tag} variant="outline" className="text-xs">
                         {tag}
                       </Badge>
@@ -185,42 +193,64 @@ const Explore = () => {
         {/* All Products */}
         <div>
           <h2 className="text-2xl font-bold text-gray-900 mb-6">All Products</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {products.map((product) => (
-              <Card key={product.id} className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="flex items-start justify-between mb-2">
-                    <Badge variant="secondary">{product.type}</Badge>
-                    <span className="font-bold text-accent">{product.price}</span>
-                  </div>
-                  <CardTitle className="text-lg">{product.title}</CardTitle>
-                  <CardDescription>{product.description}</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex items-center space-x-2">
-                    <div className="h-6 w-6 rounded-full bg-gray-200" />
-                    <Link 
-                      to={`/creator/${product.creatorId}`}
-                      className="text-sm font-medium text-gray-700 hover:text-accent"
-                    >
-                      {product.creator}
-                    </Link>
-                  </div>
-                  <div className="flex flex-wrap gap-1">
-                    {product.tags.map((tag) => (
-                      <Badge key={tag} variant="outline" className="text-xs">
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
-                  <Button className="w-full">
-                    View Product
-                    <ExternalLink className="h-4 w-4 ml-2" />
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          {isLoading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[...Array(6)].map((_, i) => (
+                <Card key={i} className="animate-pulse">
+                  <CardHeader>
+                    <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                    <div className="h-3 bg-gray-200 rounded w-1/2 mt-2"></div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="h-3 bg-gray-200 rounded w-full"></div>
+                    <div className="h-3 bg-gray-200 rounded w-2/3 mt-2"></div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : filteredProducts.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredProducts.map((product: any) => (
+                <Card key={product.id} className="hover:shadow-lg transition-shadow">
+                  <CardHeader>
+                    <div className="flex items-start justify-between mb-2">
+                      <Badge variant="secondary">{product.type}</Badge>
+                    </div>
+                    <CardTitle className="text-lg">{product.title}</CardTitle>
+                    <CardDescription>{product.description}</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex items-center space-x-2">
+                      <div className="h-6 w-6 rounded-full bg-gray-200" />
+                      <Link 
+                        to={`/creator/${product.creatorId}`}
+                        className="text-sm font-medium text-gray-700 hover:text-accent"
+                      >
+                        {product.creator}
+                      </Link>
+                    </div>
+                    <div className="flex flex-wrap gap-1">
+                      {(product.tags || []).map((tag: string) => (
+                        <Badge key={tag} variant="outline" className="text-xs">
+                          {tag}
+                        </Badge>
+                      ))}
+                    </div>
+                    <Button className="w-full">
+                      View Product
+                      <ExternalLink className="h-4 w-4 ml-2" />
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <Search className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 mb-2">No products found</h3>
+              <p className="text-gray-600">Try adjusting your filters or search terms.</p>
+            </div>
+          )}
         </div>
       </div>
     </div>
