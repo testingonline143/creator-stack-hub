@@ -22,15 +22,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.use(session({
     store: new PgSession({
       pool: pool,
-      tableName: 'session'
+      tableName: 'session',
+      createTableIfMissing: true
     }),
-    secret: process.env.SESSION_SECRET || "dev-secret-key",
+    secret: process.env.SESSION_SECRET || "dev-secret-key-12345678901234567890",
     resave: false,
     saveUninitialized: false,
+    name: 'sessionId',
     cookie: {
       secure: false, // Set to true in production with HTTPS
       httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000 // 24 hours
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      sameSite: 'lax'
     }
   }));
 
@@ -96,8 +99,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.get("/api/auth/me", (req, res) => {
-    if (req.session.user) {
-      res.json({ user: req.session.user });
+    if (req.session.userId && req.session.user) {
+      res.json(req.session.user);
     } else {
       res.status(401).json({ error: "Not authenticated" });
     }
