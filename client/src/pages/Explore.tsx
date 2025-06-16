@@ -1,15 +1,29 @@
 
+import { useState, useEffect } from "react";
 import Navigation from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, ExternalLink, Star, Filter, SlidersHorizontal, TrendingUp } from "lucide-react";
+import { Search, ExternalLink, Star, Filter, SlidersHorizontal, TrendingUp, Crown, User } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
 
 const Explore = () => {
-  const products = [
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedType, setSelectedType] = useState("All");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Fetch approved products for explore page
+  const { data: products = [], isLoading } = useQuery({
+    queryKey: ["/api/products", { status: "approved" }],
+    queryFn: () => apiRequest("/api/products?status=approved"),
+  });
+
+  // Featured products data - these are highlighted/curated products
+  const featuredProducts = [
     {
       id: 1,
       title: "Email Marketing Mastery",
@@ -17,75 +31,57 @@ const Explore = () => {
       creator: "John Doe",
       creatorId: "john-doe",
       type: "Course",
-      category: "Marketing",
       tags: ["Email", "Marketing", "Business"],
       price: "$97",
-      featured: true
+      featured: true,
+      rating: 4.8,
+      students: 1247
     },
     {
       id: 2,
-      title: "UI/UX Design System",
-      description: "Professional design system for modern web apps",
-      creator: "Sarah Wilson",
-      creatorId: "sarah-wilson",
-      type: "Template",
-      category: "Design",
-      tags: ["Design", "UI/UX", "Templates"],
-      price: "$79",
-      featured: false
+      title: "AI Content Generator",
+      description: "Tool for generating marketing content with AI",
+      creator: "Mike Chen", 
+      creatorId: "mike-chen",
+      type: "Tool",
+      tags: ["AI", "Content", "Automation"],
+      price: "$129",
+      featured: true,
+      rating: 4.9,
+      students: 892
     },
     {
       id: 3,
-      title: "AI Content Generator",
-      description: "Tool for generating marketing content with AI",
-      creator: "Mike Chen",
-      creatorId: "mike-chen",
-      type: "Tool",
-      category: "Technology",
-      tags: ["AI", "Content", "Automation"],
-      price: "$129",
-      featured: true
-    },
-    {
-      id: 4,
-      title: "Notion Business Templates",
-      description: "Complete business management templates for Notion",
-      creator: "Lisa Rodriguez",
-      creatorId: "lisa-rodriguez",
-      type: "Template",
-      category: "Productivity",
-      tags: ["Notion", "Business", "Templates"],
-      price: "$39",
-      featured: false
-    },
-    {
-      id: 5,
-      title: "Social Media Course",
-      description: "Master social media marketing across all platforms",
-      creator: "David Kim",
-      creatorId: "david-kim",
-      type: "Course",
-      category: "Marketing",
-      tags: ["Social Media", "Marketing", "Strategy"],
-      price: "$89",
-      featured: false
-    },
-    {
-      id: 6,
       title: "Startup Pitch Deck",
       description: "Professional pitch deck template for startups",
       creator: "Emma Thompson",
-      creatorId: "emma-thompson",
+      creatorId: "emma-thompson", 
       type: "Template",
-      category: "Business",
       tags: ["Startup", "Pitch", "Templates"],
       price: "$49",
-      featured: true
+      featured: true,
+      rating: 4.7,
+      students: 2156
     }
   ];
 
-  const categories = ["All", "Marketing", "Design", "Technology", "Productivity", "Business"];
+  const popularTags = ["AI", "Marketing", "Design", "Business", "Templates", "Automation", "Course", "Tool", "Free", "Notion"];
   const productTypes = ["All", "Course", "Template", "Tool", "Guide"];
+
+  // Filter products based on selected filters and search
+  const filteredProducts = products.filter(product => {
+    const matchesSearch = !searchQuery || 
+      product.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.description?.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const matchesType = selectedType === "All" || 
+      product.type === selectedType;
+    
+    const matchesCategory = selectedCategory === "All" ||
+      (product.tags && product.tags.includes(selectedCategory));
+    
+    return matchesSearch && matchesType && matchesCategory;
+  });
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
