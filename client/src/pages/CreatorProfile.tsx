@@ -49,17 +49,20 @@ const CreatorProfile = () => {
             </div>
           </div>
           
-          {/* Email Capture (Premium Feature) */}
+          {/* Contact Info */}
           <div className="mt-8 p-6 bg-gray-50 rounded-lg">
-            <h3 className="font-semibold mb-2">Stay Updated</h3>
+            <h3 className="font-semibold mb-2">Get In Touch</h3>
             <p className="text-sm text-gray-600 mb-4">
-              Get notified when I release new products and exclusive content.
+              Connect with me through my social media channels or website for updates and collaboration opportunities.
             </p>
             <div className="flex space-x-2">
-              <Input placeholder="Enter your email" className="flex-1" />
-              <Button>
-                <Mail className="h-4 w-4 mr-2" />
-                Subscribe
+              <Button variant="outline" size="sm">
+                <Globe className="h-4 w-4 mr-2" />
+                Visit Website
+              </Button>
+              <Button variant="outline" size="sm">
+                <Twitter className="h-4 w-4 mr-2" />
+                Follow
               </Button>
             </div>
           </div>
@@ -74,42 +77,36 @@ const CreatorProfile = () => {
                 title: "Email Marketing Mastery",
                 description: "Complete course on building and monetizing email lists",
                 type: "Course",
-                price: "$97",
                 link: "https://example.com"
               },
               {
                 title: "Landing Page Templates",
                 description: "10 high-converting landing page templates",
                 type: "Template",
-                price: "$29",
                 link: "https://example.com"
               },
               {
                 title: "Social Media Toolkit",
                 description: "Templates and tools for social media management",
                 type: "Tool",
-                price: "$49",
                 link: "https://example.com"
               },
               {
                 title: "Content Calendar Template",
                 description: "Notion template for content planning",
                 type: "Template",
-                price: "$19",
                 link: "https://example.com"
               },
               {
                 title: "Facebook Ads Masterclass",
                 description: "Advanced strategies for Facebook advertising",
                 type: "Course",
-                price: "$149",
                 link: "https://example.com"
               },
               {
                 title: "Growth Hacking Playbook",
                 description: "Proven tactics for rapid business growth",
                 type: "Guide",
-                price: "$39",
                 link: "https://example.com"
               }
             ].map((product, i) => (
@@ -119,7 +116,7 @@ const CreatorProfile = () => {
                     <Badge variant="secondary" className="mb-2">
                       {product.type}
                     </Badge>
-                    <span className="font-bold text-accent">{product.price}</span>
+                    <span className="font-bold text-accent">View Details</span>
                   </div>
                   <CardTitle className="text-lg">{product.title}</CardTitle>
                   <CardDescription>{product.description}</CardDescription>

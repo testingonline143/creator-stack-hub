@@ -62,12 +62,12 @@ const Index = () => {
                   <div className="text-sm text-gray-600 dark:text-gray-400">Active Creators</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-gray-900 dark:text-white">$2M+</div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">Revenue Generated</div>
+                  <div className="text-3xl font-bold text-gray-900 dark:text-white">500K+</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Profile Views</div>
                 </div>
                 <div className="text-center">
                   <div className="text-3xl font-bold text-gray-900 dark:text-white">50K+</div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">Products Sold</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Products Listed</div>
                 </div>
               </div>
             </div>
@@ -111,10 +111,10 @@ const Index = () => {
                   <div className="w-12 h-12 rounded-lg bg-purple-100 dark:bg-purple-900/50 flex items-center justify-center mb-6">
                     <TrendingUp className="h-6 w-6 text-purple-600 dark:text-purple-400" />
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Revenue Analytics</h3>
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Growth Tracking</h3>
                   <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                    Track your performance with detailed analytics, conversion metrics, 
-                    and revenue insights to optimize your business.
+                    Monitor your profile views, product engagement, and audience growth 
+                    to understand what resonates with your community.
                   </p>
                 </CardContent>
               </Card>
@@ -164,8 +164,8 @@ const Index = () => {
                 <div className="flex items-start space-x-4">
                   <CheckCircle className="h-6 w-6 text-green-500 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Smart Analytics</h3>
-                    <p className="text-gray-600 dark:text-gray-300">Track visitor behavior, conversion rates, and revenue with detailed analytics dashboard.</p>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Content Management</h3>
+                    <p className="text-gray-600 dark:text-gray-300">Organize and showcase your digital products with easy-to-use content management tools.</p>
                   </div>
                 </div>
                 
@@ -190,8 +190,8 @@ const Index = () => {
                 <div className="flex items-start space-x-4">
                   <CheckCircle className="h-6 w-6 text-green-500 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Payment Integration</h3>
-                    <p className="text-gray-600 dark:text-gray-300">Accept payments instantly with integrated Stripe, PayPal, and other payment processors.</p>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">External Linking</h3>
+                    <p className="text-gray-600 dark:text-gray-300">Direct visitors to your products on external platforms with customizable links and calls-to-action.</p>
                   </div>
                 </div>
                 
