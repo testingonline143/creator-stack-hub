@@ -2,7 +2,8 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "@/lib/queryClient";
 import { Switch, Route } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
 import Index from "./pages/Index";
@@ -12,8 +13,6 @@ import AuthDashboard from "./pages/AuthDashboard";
 import ExploreCreators from "./pages/ExploreCreators";
 import CreatorProfile from "./pages/CreatorProfile";
 import NotFound from "./pages/NotFound";
-
-const queryClient = new QueryClient();
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading } = useAuth();
