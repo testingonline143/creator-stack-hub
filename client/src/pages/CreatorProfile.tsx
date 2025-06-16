@@ -205,10 +205,10 @@ const CreatorProfile = () => {
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <Badge variant="secondary" className="mb-2">
-                        {product.type}
+                        Product
                       </Badge>
                       <span className="text-lg font-bold text-blue-600">
-                        ${product.price || '29'}
+                        $29
                       </span>
                     </div>
                     <CardTitle className="text-lg">{product.title}</CardTitle>
@@ -216,7 +216,7 @@ const CreatorProfile = () => {
                   </CardHeader>
                   <CardContent>
                     <Button className="w-full" asChild>
-                      <a href={product.url || '#'} target="_blank" rel="noopener noreferrer">
+                      <a href={product.link || '#'} target="_blank" rel="noopener noreferrer">
                         View Product
                         <ExternalLink className="h-4 w-4 ml-2" />
                       </a>
@@ -236,7 +236,7 @@ const CreatorProfile = () => {
               Free Downloads
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {freeResources.map((resource) => (
+              {freeResources.map((resource: Resource) => (
                 <Card key={resource.id} className="hover:shadow-lg transition-shadow">
                   <CardHeader>
                     <div className="flex items-start justify-between">
@@ -250,7 +250,7 @@ const CreatorProfile = () => {
                   </CardHeader>
                   <CardContent>
                     <Button variant="outline" className="w-full" asChild>
-                      <a href={resource.url || '#'} target="_blank" rel="noopener noreferrer">
+                      <a href={resource.link || '#'} target="_blank" rel="noopener noreferrer">
                         Download
                         <Download className="h-4 w-4 ml-2" />
                       </a>
