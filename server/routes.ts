@@ -51,8 +51,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/auth/register", async (req, res) => {
     try {
-      console.log("Registration request body:", req.body);
-      
       const registerSchema = z.object({
         email: z.string().email("Invalid email address"),
         username: z.string().min(3, "Username must be at least 3 characters"),
@@ -62,7 +60,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const result = registerSchema.safeParse(req.body);
       if (!result.success) {
-        console.error("Validation errors:", result.error.errors);
         return res.status(400).json({ 
           error: "Validation failed", 
           details: result.error.errors 
@@ -70,8 +67,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const { email, username, password, name } = result.data;
-      console.log("Attempting to register user:", { email, username, name });
-      
       const user = await register(email, username, password, name);
       
       req.session.userId = user.id;

@@ -93,7 +93,12 @@ CreatorStack is a full-stack web application that allows creators to showcase th
 - **Development**: Memory storage fallback for rapid prototyping
 
 ## Changelog
-- June 15, 2025. Initial setup
+- June 16, 2025: Successfully migrated from Replit Agent to standard Replit environment
+- June 16, 2025: Fixed authentication system (registration and login working)
+- June 16, 2025: Created new dashboard design inspired by modern creator platforms
+- June 16, 2025: Added sidebar navigation with Creator Stories, Content Ideas, and Success Stories sections
+- June 16, 2025: Set up PostgreSQL database with proper schema migrations
+- June 15, 2025: Initial setup
 
 ## User Preferences
 
