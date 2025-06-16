@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation } from "wouter";
 import { Home, Compass, LayoutDashboard, Sparkles, Menu, X } from "lucide-react";
 import { useState } from "react";
 
