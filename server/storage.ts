@@ -1,6 +1,6 @@
 import { 
-  users, creators, products, resources, tags, emailSubmissions,
-  type User, type InsertUser, 
+  authUsers, creators, products, resources, tags, emailSubmissions,
+  type User, type UpsertUser, 
   type Creator, type InsertCreator,
   type Product, type InsertProduct,
   type Resource, type InsertResource,
@@ -12,9 +12,9 @@ import { eq, desc, and, inArray, sql } from "drizzle-orm";
 
 export interface IStorage {
   // Legacy user methods
-  getUser(id: number): Promise<User | undefined>;
+  getUser(id: string): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
+  createUser(user: UpsertUser): Promise<User>;
 
   // Creator methods
   getCreator(id: number): Promise<Creator | undefined>;
@@ -52,19 +52,19 @@ export interface IStorage {
 
 export class DatabaseStorage implements IStorage {
   // Legacy user methods
-  async getUser(id: number): Promise<User | undefined> {
-    const [user] = await db.select().from(users).where(eq(users.id, id));
+  async getUser(id: string): Promise<User | undefined> {
+    const [user] = await db.select().from(authUsers).where(eq(authUsers.id, id));
     return user || undefined;
   }
 
   async getUserByUsername(username: string): Promise<User | undefined> {
-    const [user] = await db.select().from(users).where(eq(users.username, username));
+    const [user] = await db.select().from(authUsers).where(eq(authUsers.email, username));
     return user || undefined;
   }
 
-  async createUser(insertUser: InsertUser): Promise<User> {
+  async createUser(insertUser: UpsertUser): Promise<User> {
     const [user] = await db
-      .insert(users)
+      .insert(authUsers)
       .values(insertUser)
       .returning();
     return user;
@@ -135,11 +135,7 @@ export class DatabaseStorage implements IStorage {
   async createProduct(product: InsertProduct): Promise<Product> {
     const [newProduct] = await db
       .insert(products)
-      .values({
-        ...product,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      })
+      .values(product)
       .returning();
     return newProduct;
   }
@@ -147,10 +143,7 @@ export class DatabaseStorage implements IStorage {
   async updateProduct(id: number, updates: Partial<InsertProduct>): Promise<Product> {
     const [updatedProduct] = await db
       .update(products)
-      .set({
-        ...updates,
-        updatedAt: new Date(),
-      })
+      .set(updates)
       .where(eq(products.id, id))
       .returning();
     return updatedProduct;
