@@ -1,6 +1,6 @@
 import { 
-  authUsers, creators, products, resources, tags, emailSubmissions,
-  type User, type UpsertUser, 
+  authUsers, users, creators, products, resources, tags, emailSubmissions,
+  type User, type UpsertUser, type LocalUser, type InsertUser,
   type Creator, type InsertCreator,
   type Product, type InsertProduct,
   type Resource, type InsertResource,
@@ -15,6 +15,11 @@ export interface IStorage {
   getUser(id: string): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   createUser(user: UpsertUser): Promise<User>;
+
+  // Local authentication methods
+  getUserByEmail(email: string): Promise<LocalUser | undefined>;
+  getUserByUsernameLocal(username: string): Promise<LocalUser | undefined>;
+  createLocalUser(user: InsertUser): Promise<LocalUser>;
 
   // Creator methods
   getCreator(id: number): Promise<Creator | undefined>;
@@ -68,6 +73,25 @@ export class DatabaseStorage implements IStorage {
       .values(insertUser)
       .returning();
     return user;
+  }
+
+  // Local authentication methods
+  async getUserByEmail(email: string): Promise<LocalUser | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.email, email));
+    return user || undefined;
+  }
+
+  async getUserByUsernameLocal(username: string): Promise<LocalUser | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user || undefined;
+  }
+
+  async createLocalUser(user: InsertUser): Promise<LocalUser> {
+    const [newUser] = await db
+      .insert(users)
+      .values(user)
+      .returning();
+    return newUser;
   }
 
   // Creator methods

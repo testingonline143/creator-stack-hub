@@ -93,6 +93,17 @@ export const authUsers = pgTable("auth_users", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// Local authentication table
+export const users = pgTable("users", {
+  id: serial("id").primaryKey(),
+  email: text("email").notNull().unique(),
+  username: text("username").notNull().unique(),
+  passwordHash: text("password_hash").notNull(),
+  name: text("name").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Success stories table
 export const successStories = pgTable("success_stories", {
   id: serial("id").primaryKey(),
@@ -239,8 +250,17 @@ export const insertAuthUserSchema = createInsertSchema(authUsers).pick({
   profileImageUrl: true,
 });
 
+export const insertUserSchema = createInsertSchema(users).pick({
+  email: true,
+  username: true,
+  passwordHash: true,
+  name: true,
+});
+
 export type UpsertUser = typeof authUsers.$inferInsert;
 export type User = typeof authUsers.$inferSelect;
+export type LocalUser = typeof users.$inferSelect;
+export type InsertUser = z.infer<typeof insertUserSchema>;
 export type SuccessStory = typeof successStories.$inferSelect;
 export type InsertSuccessStory = z.infer<typeof insertSuccessStorySchema>;
 export type CaseStudy = typeof caseStudies.$inferSelect;
