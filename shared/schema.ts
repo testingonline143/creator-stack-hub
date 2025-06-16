@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, timestamp, json } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, timestamp, json, varchar, index } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
@@ -71,10 +71,65 @@ export const emailSubmissions = pgTable("email_submissions", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+// Sessions table for authentication
+export const sessions = pgTable(
+  "sessions",
+  {
+    sid: varchar("sid").primaryKey(),
+    sess: json("sess").notNull(),
+    expire: timestamp("expire").notNull(),
+  },
+  (table) => [index("IDX_session_expire").on(table.expire)],
+);
+
+// Auth users table (primary auth table)
+export const authUsers = pgTable("auth_users", {
+  id: varchar("id").primaryKey().notNull(),
+  email: varchar("email").unique(),
+  firstName: varchar("first_name"),
+  lastName: varchar("last_name"),
+  profileImageUrl: varchar("profile_image_url"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Success stories table
+export const successStories = pgTable("success_stories", {
+  id: serial("id").primaryKey(),
+  creatorId: integer("creator_id").notNull(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  revenue: text("revenue"), // e.g., "$30,000"
+  timeframe: text("timeframe"), // e.g., "Monthly Revenue"
+  imageUrl: text("image_url"),
+  videoUrl: text("video_url"),
+  isPublished: boolean("is_published").default(false),
+  isFeatured: boolean("is_featured").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Daily case studies table
+export const caseStudies = pgTable("case_studies", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  creatorName: text("creator_name").notNull(),
+  creatorId: integer("creator_id"),
+  imageUrl: text("image_url"),
+  revenue: text("revenue"),
+  timeframe: text("timeframe"),
+  views: integer("views").default(0),
+  isPublished: boolean("is_published").default(false),
+  publishedAt: timestamp("published_at").defaultNow(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 // Relations
 export const creatorsRelations = relations(creators, ({ many }) => ({
   products: many(products),
   emailSubmissions: many(emailSubmissions),
+  successStories: many(successStories),
 }));
 
 export const productsRelations = relations(products, ({ one }) => ({
@@ -87,6 +142,20 @@ export const productsRelations = relations(products, ({ one }) => ({
 export const emailSubmissionsRelations = relations(emailSubmissions, ({ one }) => ({
   creator: one(creators, {
     fields: [emailSubmissions.creatorId],
+    references: [creators.id],
+  }),
+}));
+
+export const successStoriesRelations = relations(successStories, ({ one }) => ({
+  creator: one(creators, {
+    fields: [successStories.creatorId],
+    references: [creators.id],
+  }),
+}));
+
+export const caseStudiesRelations = relations(caseStudies, ({ one }) => ({
+  creator: one(creators, {
+    fields: [caseStudies.creatorId],
     references: [creators.id],
   }),
 }));
@@ -142,17 +211,37 @@ export type InsertTag = z.infer<typeof insertTagSchema>;
 export type EmailSubmission = typeof emailSubmissions.$inferSelect;
 export type InsertEmailSubmission = z.infer<typeof insertEmailSubmissionSchema>;
 
-// Keep legacy users table for backward compatibility
-export const users = pgTable("users", {
-  id: serial("id").primaryKey(),
-  username: text("username").notNull().unique(),
-  password: text("password").notNull(),
+export const insertSuccessStorySchema = createInsertSchema(successStories).pick({
+  creatorId: true,
+  title: true,
+  description: true,
+  revenue: true,
+  timeframe: true,
+  imageUrl: true,
+  videoUrl: true,
 });
 
-export const insertUserSchema = createInsertSchema(users).pick({
-  username: true,
-  password: true,
+export const insertCaseStudySchema = createInsertSchema(caseStudies).pick({
+  title: true,
+  description: true,
+  creatorName: true,
+  creatorId: true,
+  imageUrl: true,
+  revenue: true,
+  timeframe: true,
 });
 
-export type InsertUser = z.infer<typeof insertUserSchema>;
-export type User = typeof users.$inferSelect;
+export const insertAuthUserSchema = createInsertSchema(authUsers).pick({
+  id: true,
+  email: true,
+  firstName: true,
+  lastName: true,
+  profileImageUrl: true,
+});
+
+export type UpsertUser = typeof authUsers.$inferInsert;
+export type User = typeof authUsers.$inferSelect;
+export type SuccessStory = typeof successStories.$inferSelect;
+export type InsertSuccessStory = z.infer<typeof insertSuccessStorySchema>;
+export type CaseStudy = typeof caseStudies.$inferSelect;
+export type InsertCaseStudy = z.infer<typeof insertCaseStudySchema>;
