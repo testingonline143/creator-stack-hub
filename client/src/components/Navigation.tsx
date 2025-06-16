@@ -5,7 +5,7 @@ import { Home, Compass, LayoutDashboard, Sparkles, Menu, X } from "lucide-react"
 import { useState } from "react";
 
 const Navigation = () => {
-  const location = useLocation();
+  const [location] = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
   return (
@@ -24,7 +24,7 @@ const Navigation = () => {
           <Link 
             to="/" 
             className={`flex items-center space-x-2 text-sm font-medium transition-colors px-3 py-2 rounded-lg ${
-              location.pathname === '/' 
+              location === '/' 
                 ? 'bg-indigo-50 text-indigo-600 dark:bg-indigo-950/50 dark:text-indigo-400' 
                 : 'text-gray-600 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800'
             }`}
@@ -35,7 +35,7 @@ const Navigation = () => {
           <Link 
             to="/explore" 
             className={`flex items-center space-x-2 text-sm font-medium transition-colors px-3 py-2 rounded-lg ${
-              location.pathname === '/explore' 
+              location === '/explore' 
                 ? 'bg-indigo-50 text-indigo-600 dark:bg-indigo-950/50 dark:text-indigo-400' 
                 : 'text-gray-600 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800'
             }`}

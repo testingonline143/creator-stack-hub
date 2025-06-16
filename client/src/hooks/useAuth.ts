@@ -21,15 +21,15 @@ interface RegisterData {
 }
 
 export function useAuth() {
-  const { data: user, isLoading, error } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["/api/auth/me"],
     retry: false,
   });
 
   return {
-    user,
+    user: data,
     isLoading,
-    isAuthenticated: !!user?.user,
+    isAuthenticated: !!data,
     error,
   };
 }
