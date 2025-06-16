@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Check, X, Star, Users, Package, Eye, BookOpen, Pencil, Trash2 } from "lucide-react";
+import { Check, X, Star, Users, Package, Eye, BookOpen, Pencil, Trash2, Mail } from "lucide-react";
 
 const AdminDashboard = () => {
   const pendingProducts = [
@@ -80,7 +80,7 @@ const AdminDashboard = () => {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Users</CardTitle>
@@ -113,6 +113,16 @@ const AdminDashboard = () => {
           </Card>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Newsletter Subscribers</CardTitle>
+              <Mail className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">8,432</div>
+              <p className="text-xs text-muted-foreground">+23% this month</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Page Views</CardTitle>
               <Eye className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
@@ -128,6 +138,7 @@ const AdminDashboard = () => {
           <TabsList>
             <TabsTrigger value="pending">Pending Approvals</TabsTrigger>
             <TabsTrigger value="users">Users</TabsTrigger>
+            <TabsTrigger value="subscribers">Newsletter Subscribers</TabsTrigger>
             <TabsTrigger value="featured">Featured Content</TabsTrigger>
             <TabsTrigger value="premium-resources">Premium Resources</TabsTrigger>
           </TabsList>
@@ -216,6 +227,55 @@ const AdminDashboard = () => {
                       <Button size="sm" variant="outline">
                         View Profile
                       </Button>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="subscribers" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Newsletter Subscribers</CardTitle>
+                <CardDescription>
+                  Manage newsletter subscribers and email campaigns
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {[
+                    { email: "john@example.com", name: "John Smith", creator: "Digital Marketing Pro", signupDate: "2024-01-15", status: "Active" },
+                    { email: "sarah@example.com", name: "Sarah Johnson", creator: "Tech Educator", signupDate: "2024-01-14", status: "Active" },
+                    { email: "mike@example.com", name: "Mike Chen", creator: "Business Coach", signupDate: "2024-01-13", status: "Active" },
+                    { email: "emma@example.com", name: "Emma Wilson", creator: "Design Expert", signupDate: "2024-01-12", status: "Unsubscribed" }
+                  ].map((subscriber, index) => (
+                    <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
+                      <div className="flex-1">
+                        <h4 className="font-medium">{subscriber.name}</h4>
+                        <p className="text-sm text-gray-600">{subscriber.email}</p>
+                        <div className="flex items-center space-x-4 mt-2">
+                          <span className="text-sm text-gray-500">Subscribed to: {subscriber.creator}</span>
+                          <Badge variant={subscriber.status === "Active" ? "default" : "secondary"}>
+                            {subscriber.status}
+                          </Badge>
+                          <span className="text-sm text-gray-500">
+                            Joined {subscriber.signupDate}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Button size="sm" variant="outline">
+                          <Mail className="h-4 w-4 mr-2" />
+                          Contact
+                        </Button>
+                        {subscriber.status === "Active" && (
+                          <Button size="sm" variant="outline" className="text-red-600 hover:text-red-700">
+                            <X className="h-4 w-4 mr-2" />
+                            Unsubscribe
+                          </Button>
+                        )}
+                      </div>
                     </div>
                   ))}
                 </div>

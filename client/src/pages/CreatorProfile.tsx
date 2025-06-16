@@ -49,22 +49,20 @@ const CreatorProfile = () => {
             </div>
           </div>
           
-          {/* Contact Info */}
-          <div className="mt-8 p-6 bg-gray-50 rounded-lg">
-            <h3 className="font-semibold mb-2">Get In Touch</h3>
+          {/* Email Newsletter Signup */}
+          <div className="mt-8 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
+            <h3 className="font-semibold mb-2 text-gray-900">Stay Updated</h3>
             <p className="text-sm text-gray-600 mb-4">
-              Connect with me through my social media channels or website for updates and collaboration opportunities.
+              Get notified when I release new products and exclusive content. Join my newsletter for insider tips and early access.
             </p>
             <div className="flex space-x-2">
-              <Button variant="outline" size="sm">
-                <Globe className="h-4 w-4 mr-2" />
-                Visit Website
-              </Button>
-              <Button variant="outline" size="sm">
-                <Twitter className="h-4 w-4 mr-2" />
-                Follow
+              <Input placeholder="Enter your email" className="flex-1 bg-white" />
+              <Button className="bg-blue-600 hover:bg-blue-700">
+                <Mail className="h-4 w-4 mr-2" />
+                Subscribe
               </Button>
             </div>
+            <p className="text-xs text-gray-500 mt-2">Join 2,500+ subscribers. No spam, unsubscribe anytime.</p>
           </div>
         </div>
 
