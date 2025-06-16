@@ -1,17 +1,99 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
+import { login, register, requireAuth } from "./auth";
+import session from "express-session";
 import { 
   insertCreatorSchema, 
   insertProductSchema, 
   insertResourceSchema,
   insertTagSchema,
-  insertEmailSubmissionSchema 
+  insertEmailSubmissionSchema,
+  insertUserSchema 
 } from "@shared/schema";
+import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Creator routes
-  app.get("/api/creators", async (req, res) => {
+  // Session configuration
+  app.use(session({
+    secret: process.env.SESSION_SECRET || "dev-secret-key",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: false, // Set to true in production with HTTPS
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    }
+  }));
+
+  // Authentication routes
+  app.post("/api/auth/login", async (req, res) => {
+    try {
+      const { email, password } = req.body;
+      
+      if (!email || !password) {
+        return res.status(400).json({ error: "Email and password required" });
+      }
+
+      const user = await login(email, password);
+      if (!user) {
+        return res.status(401).json({ error: "Invalid credentials" });
+      }
+
+      req.session.userId = user.id;
+      req.session.user = user;
+      res.json({ user });
+    } catch (error) {
+      console.error("Login error:", error);
+      res.status(500).json({ error: "Login failed" });
+    }
+  });
+
+  app.post("/api/auth/register", async (req, res) => {
+    try {
+      const registerSchema = insertUserSchema.extend({
+        password: z.string().min(6, "Password must be at least 6 characters")
+      });
+      
+      const result = registerSchema.safeParse(req.body);
+      if (!result.success) {
+        return res.status(400).json({ 
+          error: "Validation failed", 
+          details: result.error.errors 
+        });
+      }
+
+      const { email, username, password, name } = result.data;
+      const user = await register(email, username, password, name);
+      
+      req.session.userId = user.id;
+      req.session.user = user;
+      res.status(201).json({ user });
+    } catch (error: any) {
+      console.error("Registration error:", error);
+      res.status(400).json({ error: error.message || "Registration failed" });
+    }
+  });
+
+  app.post("/api/auth/logout", (req, res) => {
+    req.session.destroy((err) => {
+      if (err) {
+        return res.status(500).json({ error: "Logout failed" });
+      }
+      res.json({ message: "Logged out successfully" });
+    });
+  });
+
+  app.get("/api/auth/me", (req, res) => {
+    if (req.session.user) {
+      res.json({ user: req.session.user });
+    } else {
+      res.status(401).json({ error: "Not authenticated" });
+    }
+  });
+
+  // Creator routes (protected)
+  app.get("/api/creators", requireAuth, async (req, res) => {
     try {
       const creators = await storage.getAllCreators();
       res.json(creators);
@@ -71,8 +153,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Product routes
-  app.get("/api/products", async (req, res) => {
+  // Product routes (protected)
+  app.get("/api/products", requireAuth, async (req, res) => {
     try {
       const { status, creatorId } = req.query;
       
