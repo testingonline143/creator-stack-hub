@@ -196,6 +196,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Public route for creator's products (for profile pages)
+  app.get("/api/products/creator/:creatorId", async (req, res) => {
+    try {
+      const products = await storage.getProductsByCreator(parseInt(req.params.creatorId));
+      res.json(products);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch creator products" });
+    }
+  });
+
   app.post("/api/products", async (req, res) => {
     try {
       const validatedData = insertProductSchema.parse(req.body);
@@ -280,6 +290,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(204).send();
     } catch (error) {
       res.status(400).json({ error: "Failed to delete resource" });
+    }
+  });
+
+  // Public route for creator's resources (for profile pages)
+  app.get("/api/resources/creator/:creatorId", async (req, res) => {
+    try {
+      const resources = await storage.getResources();
+      // Filter by creator if needed - for now return all free resources
+      const creatorResources = resources.filter(r => r.visibleTo === 'free' || !r.visibleTo);
+      res.json(creatorResources);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch creator resources" });
     }
   });
 

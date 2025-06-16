@@ -1,0 +1,121 @@
+// Replit Starter: CreatorStack MVP (React + Tailwind)
+
+// Folder Structure:
+// /src
+// ├── App.jsx
+// ├── pages/
+// │   ├── Explore.jsx
+// │   ├── Dashboard.jsx
+// │   └── PublicProfile.jsx
+// ├── components/
+// │   ├── ProductCard.jsx
+// │   └── TagFilters.jsx
+// ├── data/
+// │   ├── products.json
+// │   └── creators.json
+// └── index.css
+
+// -----------------------------
+// App.jsx
+import { BrowserRouter, Routes, Route } from "react-router-dom"
+import Explore from "./pages/Explore"
+import Dashboard from "./pages/Dashboard"
+import PublicProfile from "./pages/PublicProfile"
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Explore />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/u/:username" element={<PublicProfile />} />
+      </Routes>
+    </BrowserRouter>
+  )
+}
+
+export default App
+
+// -----------------------------
+// data/products.json (mock DB)
+[
+  {
+    "id": 1,
+    "title": "Landing Page Templates",
+    "description": "10 high-converting layouts",
+    "price": "$29",
+    "tags": ["Templates"],
+    "creator": "alexthompson",
+    "status": "approved",
+    "url": "#"
+  },
+  {
+    "id": 2,
+    "title": "Email Template Pack",
+    "description": "50+ email templates",
+    "price": "$19",
+    "tags": ["Templates"],
+    "creator": "alexthompson",
+    "status": "pending",
+    "url": "#"
+  }
+]
+
+// -----------------------------
+// data/creators.json
+[
+  {
+    "username": "alexthompson",
+    "name": "Alex Thompson",
+    "bio": "Marketing expert + creator",
+    "avatar": "https://placehold.co/64x64",
+    "socials": ["https://twitter.com/alex", "https://youtube.com/alex"]
+  }
+]
+
+// -----------------------------
+// PublicProfile.jsx
+import { useParams } from "react-router-dom"
+import creators from "../data/creators.json"
+import products from "../data/products.json"
+
+function PublicProfile() {
+  const { username } = useParams()
+  const creator = creators.find(c => c.username === username)
+  const userProducts = products.filter(p => p.creator === username && p.status === "approved")
+
+  return (
+    <div className="p-6 max-w-3xl mx-auto">
+      <div className="flex items-center gap-4">
+        <img src={creator.avatar} alt="Avatar" className="w-16 h-16 rounded-full" />
+        <div>
+          <h2 className="text-xl font-bold">{creator.name}</h2>
+          <p>{creator.bio}</p>
+        </div>
+      </div>
+      <h3 className="mt-6 text-lg font-semibold">Digital Products</h3>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+        {userProducts.map(p => (
+          <div key={p.id} className="border p-4 rounded">
+            <h4 className="font-bold">{p.title}</h4>
+            <p>{p.description}</p>
+            <span className="text-sm">{p.price}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+export default PublicProfile
+
+// -----------------------------
+// You can now build:
+// - Explore.jsx → loads all approved products
+// - Dashboard.jsx → shows creator's products & form to submit
+// - TagFilters.jsx + ProductCard.jsx → reusable components
+
+// Tailwind + React are ready for styling & functionality.
+
+// ✅ Use Supabase later to replace the JSON files with real DB
+// ✅ Add auth, stripe, email form, and admin approval system after MVP
