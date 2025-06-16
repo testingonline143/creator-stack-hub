@@ -59,7 +59,7 @@ function Router() {
           <ExploreCreators />
         </ProtectedRoute>
       </Route>
-      <Route path="/creators/:id" component={CreatorProfile} />
+      <Route path="/u/:username" component={CreatorProfile} />
       <Route component={NotFound} />
     </Switch>
   );

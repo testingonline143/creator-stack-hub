@@ -14,29 +14,29 @@ import { useToast } from "@/hooks/use-toast";
 import type { Product, Resource } from "@shared/schema";
 
 const CreatorProfile = () => {
-  const { id } = useParams();
+  const { username } = useParams();
   const [email, setEmail] = useState("");
   const { toast } = useToast();
 
-  // Fetch creator data
+  // Fetch creator data by username
   const { data: creator, isLoading: creatorLoading } = useQuery({
-    queryKey: ['/api/creators', id],
-    queryFn: () => apiRequest(`/api/creators/${id}`),
-    enabled: !!id,
+    queryKey: ['/api/creators/username', username],
+    queryFn: () => apiRequest(`/api/creators/username/${username}`),
+    enabled: !!username,
   });
 
   // Fetch creator's products
   const { data: products = [], isLoading: productsLoading } = useQuery({
-    queryKey: ['/api/products/creator', id],
-    queryFn: () => apiRequest(`/api/products/creator/${id}`),
-    enabled: !!id,
+    queryKey: ['/api/products/creator', creator?.id],
+    queryFn: () => apiRequest(`/api/products/creator/${creator?.id}`),
+    enabled: !!creator?.id,
   });
 
   // Fetch creator's resources
   const { data: resources = [], isLoading: resourcesLoading } = useQuery({
-    queryKey: ['/api/resources/creator', id],
-    queryFn: () => apiRequest(`/api/resources/creator/${id}`),
-    enabled: !!id,
+    queryKey: ['/api/resources/creator', creator?.id],
+    queryFn: () => apiRequest(`/api/resources/creator/${creator?.id}`),
+    enabled: !!creator?.id,
   });
 
   // Email subscription mutation
