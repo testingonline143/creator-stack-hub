@@ -53,7 +53,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       console.log("Registration request body:", req.body);
       
-      const registerSchema = insertUserSchema.extend({
+      const registerSchema = z.object({
+        email: z.string().email("Invalid email address"),
+        username: z.string().min(3, "Username must be at least 3 characters"),
+        name: z.string().min(1, "Name is required"),
         password: z.string().min(6, "Password must be at least 6 characters")
       });
       
