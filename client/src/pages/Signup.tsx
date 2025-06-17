@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { useRegister } from "@/hooks/useAuth";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,6 +10,8 @@ import { useToast } from "@/hooks/use-toast";
 export default function Signup() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  const { register } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     username: "",
@@ -17,25 +19,25 @@ export default function Signup() {
     name: "",
   });
 
-  const register = useRegister();
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     
     try {
-      await register.mutateAsync(formData);
+      await register(formData);
       toast({
         title: "Success",
         description: "Account created successfully!",
       });
-      // Force a page reload to update auth state
-      window.location.href = "/dashboard";
+      setLocation("/dashboard");
     } catch (error: any) {
       toast({
         title: "Error",
         description: error.message || "Registration failed",
         variant: "destructive",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -109,9 +111,9 @@ export default function Signup() {
             <Button 
               type="submit" 
               className="w-full" 
-              disabled={register.isPending}
+              disabled={isLoading}
             >
-              {register.isPending ? "Creating account..." : "Create Account"}
+              {isLoading ? "Creating account..." : "Create Account"}
             </Button>
           </form>
           <div className="mt-4 text-center text-sm">

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { useLogin } from "@/hooks/useAuth";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,30 +10,32 @@ import { useToast } from "@/hooks/use-toast";
 export default function Login() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  const { login } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
-  const login = useLogin();
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     
     try {
-      await login.mutateAsync(formData);
+      await login(formData.email, formData.password);
       toast({
         title: "Success",
         description: "Logged in successfully!",
       });
-      // Force a page reload to update auth state
-      window.location.href = "/dashboard";
+      setLocation("/dashboard");
     } catch (error: any) {
       toast({
         title: "Error",
         description: error.message || "Login failed",
         variant: "destructive",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -82,9 +84,9 @@ export default function Login() {
             <Button 
               type="submit" 
               className="w-full" 
-              disabled={login.isPending}
+              disabled={isLoading}
             >
-              {login.isPending ? "Signing in..." : "Sign In"}
+              {isLoading ? "Signing in..." : "Sign In"}
             </Button>
           </form>
           <div className="mt-4 text-center text-sm">
