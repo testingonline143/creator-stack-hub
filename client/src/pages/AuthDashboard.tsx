@@ -31,14 +31,13 @@ interface User {
 }
 
 export default function AuthDashboard() {
-  const { user, isAuthenticated } = useAuth();
-  const logout = useLogout();
+  const { user, isAuthenticated, logout } = useAuth();
   const { toast } = useToast();
   const [, setLocation] = useLocation();
 
   const handleLogout = async () => {
     try {
-      await logout.mutateAsync();
+      await logout();
       toast({
         title: "Success",
         description: "Logged out successfully",
