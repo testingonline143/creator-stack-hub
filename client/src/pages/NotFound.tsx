@@ -1,7 +1,7 @@
 
 import Navigation from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Link } from "wouter";
 import { Home, ArrowLeft } from "lucide-react";
 
 const NotFound = () => {
@@ -19,7 +19,7 @@ const NotFound = () => {
         </div>
         
         <div className="flex items-center justify-center space-x-4">
-          <Link to="/">
+          <Link href="/">
             <Button className="flex items-center space-x-2">
               <Home className="h-4 w-4" />
               <span>Go Home</span>
