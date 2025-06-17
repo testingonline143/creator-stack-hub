@@ -24,6 +24,31 @@ export function useAuth() {
   const { data, isLoading, error } = useQuery({
     queryKey: ["/api/auth/me"],
     retry: false,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchInterval: false,
+    staleTime: Infinity,
+    queryFn: async () => {
+      try {
+        const response = await fetch("/api/auth/me", {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          if (response.status === 401) {
+            return null; // Not authenticated, return null instead of throwing
+          }
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return response.json();
+      } catch (error) {
+        return null; // Return null for any error to prevent infinite retries
+      }
+    },
   });
 
   return {

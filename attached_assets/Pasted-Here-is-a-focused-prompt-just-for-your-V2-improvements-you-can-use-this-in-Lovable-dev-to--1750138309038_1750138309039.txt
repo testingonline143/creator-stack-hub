@@ -1,0 +1,77 @@
+Here is a **focused prompt just for your V2 improvements** — you can use this in **Lovable.dev** to extend your MVP with the new V2 features:
+
+---
+
+💡 **Lovable App Prompt: CreatorStack V2 Upgrades**
+
+I want to upgrade my **CreatorStack** web app (which already allows creators to showcase products and access a premium Resources Hub) by adding new V2 features to improve premium value and discovery:
+
+---
+
+**V2 Features to Add:**
+
+✅ **Email Integrations**
+• New "Integrations" tab in Creator Dashboard
+• Support connecting ConvertKit / Mailchimp / Beehiiv
+• Auto-sync new subscribers from public profile opt-ins
+• Optionally auto-send welcome email (per connected platform)
+
+✅ **Explore Page Improvements**
+• Filters: product type (courses, templates, services)
+• Tags/niches (design, marketing, AI, writing, etc.)
+• SEO optimization: meta tags per profile
+• Pagination or infinite scroll
+
+✅ **Analytics (Premium)**
+• New "Analytics" tab in Creator Dashboard
+• Show total profile views
+• Show product click stats
+• Show email opt-ins (subscriber count)
+
+✅ **Resources Hub Improvements**
+• Resource categories (Templates, Tools, Guides)
+• Drip content unlock (by subscription age or plan level)
+• Optional link to premium community (Slack/Discord)
+
+✅ **Design & UX Polish**
+• Improved mobile layout for public profiles
+• Dark mode toggle
+• Profile badges (Featured, Trending)
+
+---
+
+**Tech Stack:**
+• Frontend: Vite, React, shadcn/ui, Tailwind
+• Backend: Supabase
+• Auth: Email/password + Google OAuth
+• Third-party OAuth: ConvertKit, Mailchimp, Beehiiv
+
+---
+
+**Updated Database Tables:**
+
+📦 `Analytics`
+• creator\_id
+• profile\_views
+• product\_clicks
+• subscriber\_count
+• timestamp
+
+📦 `Resources` (updated)
+• category
+• drip\_release\_date
+
+📦 `ExploreFeatures` (updated)
+• badge (Featured, Trending)
+
+---
+
+This prompt is **V2 only** — you can layer this on top of your existing MVP scaffold in Lovable.dev.
+
+---
+
+Would you like me to also prep:
+✅ A sample "What's new in V2" page for your launch?
+✅ A migration checklist (how to upgrade MVP to V2)?
+
+Just tell me! 🚀
